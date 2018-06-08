@@ -24,18 +24,22 @@ similarity analysis strategy.
 
 This code corresponds to the paper published in CCGrid2017: [LogAider - A tool for mining potential correlations in HPC system logs](https://ieeexplore.ieee.org/document/7973730/).
 
+As the developer, I strongly recommend you to read the paper carefully to understand how LogAider works, in that the following description may use some terms defined in the paper, such as value-combination pool.
+
 The Mira RAS log data are available to download from [https://reports.alcf.anl.gov/data/mira.html](https://reports.alcf.anl.gov/data/mira.html)
 
-The above log data page includes all severity levels of messages (including INFO, WARN and FATAL). If you are interested in only fatal events, we already extrated them to be [here](https://github.com/disheng222/LogAider/blob/master/fatalevents/totalFatalMsg.fat.tar.gz).
-You can extract the fatal events by analysis.RAS.CollectWarnFatalMessags, which will be described later.
+The above log data page includes all severity levels of messages (including INFO, WARN and FATAL). If you are interested in only fatal events, we already extracted them to be [here](fatalevents/totalFatalMsg.fat.tar.gz).
+You can also extract the fatal events by yourself using analysis.RAS.CollectWarnFatalMessags (requiring a huge memory setting though), which will be described later.
 
-Dependency
+Dependencies
 -----------
 
 LogAider is coded in Java, so you need to install JDK 1.8+
 (checking the version of JDK on your machine using 'java --version')
 
 After installing JDK, you are ready to use LogAider by running the corresponding bash scripts or the java programs.
+
+(Optional: If you want to plot spatial locations, you need to have Gnuplot installed on your machine)
 
 How to use LogAider
 -----------
@@ -441,6 +445,9 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Source Code*: plot.PlotMiraGraph.java
 	- *Usage*: 
 	- *Example*: 
+	
+> output: the gnuplot file that can be used to plot the graph using Gnuplot.  
+> example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg =256x)
 
 ### 4. Generate monthly and daily Log Analysis Results
 

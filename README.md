@@ -40,7 +40,7 @@ How to use LogAider
 LogAider provides a rich set of analysis functions as listed below, for mining the correlations of events in a Reliability, Availability and Serviablity (RAS) log.
 In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as an example. We provide flexible schema files for users to edit, in order to adapt to other systems. 
 
-### Parsing and Filtering
+### 1. Parsing and Filtering
 
 This part discusses how to parse and filter the data
 
@@ -223,15 +223,64 @@ The snapshot of one job log file is shown below:
 > * We omit the detailed description to the job-related analysis commands. 
 In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in the package analysis.Job. Please find the source codes there for details. 
 
-### Across-Field correlation
+### 2. Across-Field correlation
 
 #### Regarding RAS Log
 
-- **Generate fullSchema directory**
+- **Extract value types for each field**
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ExtractValueTypes4EachField
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ExtractValueType4EachField [schema] [inputDir] [extension] [outputDir]
+	- *Example*: java ExtractValueType4EachField /home/sdi/eventlog/schema/basicSchema.txt /home/sdi/eventlog csv /home/fti/eventlog/schema/fullSchema
+		
+> The output is a directory that contains multiple files each containing the types of values for one field. 
+The output involves two types: 'withRatio' and 'withCount'. 'withRatio' means the value types will be associated with a percentage of the portion; while the 'withCount' means being associated with the number of values. 
+Some examples are shown below:  
+
+> The example 'withRatio': the percentage % is shown with the value type.
+```
+[sdi@sdihost failureRateProperty]$ cd withRatio/
+[sdi@sdihost withRatio]$ ls
+BLOCKSIZE.fsr  BLOCKSIZE-modify.fsr  CATEGORY.fsr  COMPONENT.fsr  EVENT_COUNT.fsr  EVENT_ID.fsr  FIRST_LOCATION.fsr  FIRST_REC_TIME.fsr  LAST_REC_TIME.fsr  LOCATION_MODE.fsr  MSG_ID.fsr  SEVERITY.fsr
+[sdi@sdihost withRatio]$ cat CATEGORY.fsr 
+# CATEGORY null null 0 0 false
+Node_Board 0.12376238
+Infiniband 0.24752475
+DDR 0.37128714
+Message_Unit 0.6188119
+Coolant_Monitor 0.86633664
+Process 1.6089109
+AC_TO_DC_PWR 1.7326733
+Block 2.7227721
+Cable 3.4653466
+Card 11.014852
+BQL 18.935642
+BQC 28.712872
+Software_Error 29.579206
+[sdi@sdihost withRatio]$ 
+```
+
+> The example 'withCount': the count is shown with the value type.
+```
+[sdi@sdihost failureRateProperty]$ cd withCount/
+[sdi@sdihost withCount]$ ls
+BLOCKSIZE.fsc  CATEGORY.fsc  COMPONENT.fsc  EVENT_COUNT.fsc  EVENT_ID.fsc  FIRST_LOCATION.fsc  FIRST_REC_TIME.fsc  LAST_REC_TIME.fsc  LOCATION_MODE.fsc  MSG_ID.fsc  SEVERITY.fsc
+[sdi@sdihost withCount]$ cat CATEGORY.fsc 
+# CATEGORY null null 0 0 false
+Node_Board 1
+Infiniband 2
+DDR 3
+Message_Unit 5
+Coolant_Monitor 7
+Process 13
+AC_TO_DC_PWR 14
+Block 22
+Cable 28
+Card 89
+BQL 153
+BQC 232
+Software_Error 239
+```
 
 - **Gererate state features**
 	- *Script*: -
@@ -270,7 +319,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 	
-####	Regarding the job scheduling log (Cobalt)
+#### Regarding the job scheduling log (Cobalt)
 	
 - **Generate fullSchema directory**	
 	- *Script*: -
@@ -304,7 +353,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 	
-### Analyzing failure rate of components
+### 2. Analyzing failure rate of components
 
 #### Regarding RAS Log
 
@@ -339,7 +388,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 								
-### Plot error distribution
+### 3. Plot error distribution
 (Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
 
 - **Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**
@@ -348,7 +397,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 
-### Generate monthly and daily Log Analysis Results
+### 4. Generate monthly and daily Log Analysis Results
 
 - **use 'separate' mode to get monthly results**
 	- *Script*: -
@@ -368,7 +417,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 
-### Analyze the error propagation
+### 5. Analyze the error propagation
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
 - **Analyze the error propagation (with the same type): if a fatal event happens, it will probably happen again within x hours?**
@@ -377,7 +426,7 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Usage*: 
 	- *Example*: 
 
-### Analyze Spatial-correlation
+### 6. Analyze Spatial-correlation
 
 - ** ChiSquared Sygnificance Test**
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)

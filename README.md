@@ -24,7 +24,10 @@ similarity analysis strategy.
 
 This code corresponds to the paper published in CCGrid2017: [LogAider - A tool for mining potential correlations in HPC system logs](https://ieeexplore.ieee.org/document/7973730/).
 
-The Mira RAS log data are available to download from here: https://reports.alcf.anl.gov/data/mira.html
+The Mira RAS log data are available to download from [https://reports.alcf.anl.gov/data/mira.html](https://reports.alcf.anl.gov/data/mira.html)
+
+The above log data page includes all severity levels of messages (including INFO, WARN and FATAL). If you are interested in only fatal events, we already extrated them to be [here](https://github.com/disheng222/LogAider/blob/master/fatalevents/totalFatalMsg.fat.tar.gz).
+You can extract the fatal events by analysis.RAS.CollectWarnFatalMessags, which will be described later.
 
 Dependency
 -----------

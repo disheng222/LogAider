@@ -475,7 +475,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Example*: 
 	
 > output: the gnuplot file that can be used to plot the graph using Gnuplot.  
-> example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg){:width="36px"}
+> example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg)
 
 ### 4. <a id="3.4"/>Generate monthly and daily Log Analysis Results</a>
 

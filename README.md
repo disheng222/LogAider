@@ -1,7 +1,9 @@
 LogAider
 ========
 
-##Description
+Description
+-----------
+
 Today’s large-scale supercomputers are producing
 a huge amount of log data. Exploring various potential correla-
 tions of fatal events is crucial for understanding their causality
@@ -24,14 +26,16 @@ This code corresponds to the paper published in CCGrid2017: [LogAider - A tool f
 
 The Mira RAS log data are available to download from here: https://reports.alcf.anl.gov/data/mira.html
 
-##Dependency
+Dependency
+-----------
 
 LogAider is coded in Java, so you need to install JDK 1.8+
 (checking the version of JDK on your machine using 'java --version')
 
 After installing JDK, you are ready to use LogAider by running the corresponding bash scripts or the java programs.
 
-##How to use LogAider
+How to use LogAider
+-----------
 
 LogAider provides a rich set of analysis functions as listed below, for mining the correlations of events in a Reliability, Availability and Serviablity (RAS) log.
 In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as an example. We provide flexible schema files for users to edit, in order to adapt to other systems. 
@@ -216,7 +220,8 @@ The snapshot of one job log file is shown below:
 	- *Example*: java CalculateFailuresBasedonUsers /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/lengthAnalysis/breakWCJobList.ori /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/projFailure.out /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/userFailure.out
 
 > *hints* :  
-> * We omit the detailed description to the job-related analysis commands. In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in the package analysis.Job. Please find the source codes there for details. 
+> * We omit the detailed description to the job-related analysis commands. 
+In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in the package analysis.Job. Please find the source codes there for details. 
 
 ### Across-Field correlation
 

@@ -4,13 +4,13 @@ LogAider
 - [Description](#1)
 - [Dependencies](#2)
 - [How to use LogAider](#3)
-	- *1. Parsing and Filtering*
+	- [*1. Parsing and Filtering*](#3.1)
 		- Regarding RAS log
 			- Extract all warn and fatal messages from original log
 			- Classify Log Based on MessageID
 		- Regarding job scheduling log (Cobalt)
 			- Extract all error messages (with non-exit code)
-	- *2. Across-Field correlation*
+	- [*2. Across-Field correlation*](#3.2)
 		- Regarding RAS Log
 			- Extract value types for each field
 			- Gererate state features
@@ -23,10 +23,10 @@ LogAider
 			- Generate fullSchema directory
 			- Generate state features
 			- Generate state features
-	- *3. Plot error distribution*
-	- *4. Generate monthly and daily Log Analysis Results*
-	- *5. Analyze the error propagation*
-	- *6. Analyze Spatial-correlation*
+	- [*3. Plot error distribution*](#3.3)
+	- [*4. Generate monthly and daily Log Analysis Results*](#3.4)
+	- [*5. Analyze the error propagation*](#3.5)
+	- [*6. Analyze Spatial-correlation*](#3.6)
 			
 
 <a id="1"/>Description</a>
@@ -69,13 +69,13 @@ After installing JDK, you are ready to use LogAider by running the corresponding
 
 (Optional: If you want to plot spatial locations, you need to have Gnuplot installed on your machine)
 
-How to use LogAider
+<a id="3"/>How to use LogAider</a>
 -----------
 
 LogAider provides a rich set of analysis functions as listed below, for mining the correlations of events in a Reliability, Availability and Serviablity (RAS) log.
 In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as an example. We provide flexible schema files for users to edit, in order to adapt to other systems. 
 
-### 1. Parsing and Filtering
+### <a id="3.1"/>1. Parsing and Filtering</a>
 
 This part discusses how to parse and filter the data
 
@@ -430,7 +430,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 	
-### 2. Analyzing failure rate of components
+### <a id="3.2"/>2. Analyzing failure rate of components</a>
 
 #### Regarding RAS Log
 
@@ -465,7 +465,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 								
-### 3. Plot error distribution
+### <a id="3.3"/>3. Plot error distribution</a>
 (Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
 
 - **Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**
@@ -477,7 +477,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 > output: the gnuplot file that can be used to plot the graph using Gnuplot.  
 > example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg){:width="36px"}
 
-### 4. Generate monthly and daily Log Analysis Results
+### 4. <a id="3.4"/>Generate monthly and daily Log Analysis Results</a>
 
 - **use 'separate' mode to get monthly results**
 	- *Script*: -
@@ -497,7 +497,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 
-### 5. Analyze the error propagation
+### <a id="3.5"/>5. Analyze the error propagation</a>
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
 - **Analyze the error propagation (with the same type): if a fatal event happens, it will probably happen again within x hours?**
@@ -506,7 +506,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 
-### 6. Analyze Spatial-correlation
+### <a id="3.6"/>6. Analyze Spatial-correlation</a>
 
 - ** ChiSquared Sygnificance Test**
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)

@@ -43,23 +43,23 @@ In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as a
 *schema file* is used to specify the format of the log data. For example, in MIRA RAS log, the basicScheme.txt looks like this:  
 
 ```
-#Column 		name    schema  		Data type name  Length
-RECI    		DSYSIBM INTEGER 		4       0       No
-MSG_ID  		SYSIBM  CHARACTER       8       0       Yes  
-CATEGORY    	SYSIBM  CHARACTER       16      0       Yes  
-COMPONENT   	SYSIBM  CHARACTER       16      0       Yes  
-SEVERITY    	SYSIBM  CHARACTER       8       0       Yes  
-EVENT_TIME  	SYSIBM  TIMESTAMP       10      6       No  
-JOBID   		SYSIBM  BIGINT  		8       0       Yes  
-BLOCK   		SYSIBM  CHARACTER       32      0       Yes  
-LOCATION    	SYSIBM  CHARACTER       64      0       Yes  
-SERIALNUMBER    SYSIBM  CHARACTER       19      0       Yes  
-CPU     		SYSIBM  INTEGER 		4       0       Yes  
-COUNT   		SYSIBM  INTEGER 		4       0       Yes  
-CTLACTION       SYSIBM  VARCHAR 		256     0       Yes
-MESSAGE 		SYSIBM  VARCHAR 		1024    0       Yes
-DIAGS   		SYSIBM  CHARACTER       1       0       No
-QUALIFIER       SYSIBM  CHARACTER       32      0       Yes
+#Column 		name    schema  	Data type name  Length
+RECI			DSYSIBM INTEGER 	4       0       No
+MSG_ID			SYSIBM  CHARACTER       8       0       Yes  
+CATEGORY		SYSIBM  CHARACTER       16      0       Yes  
+COMPONENT		SYSIBM  CHARACTER       16      0       Yes  
+SEVERITY		SYSIBM  CHARACTER       8       0       Yes  
+EVENT_TIME		SYSIBM  TIMESTAMP       10      6       No  
+JOBID			SYSIBM  BIGINT  	8       0       Yes  
+BLOCK			SYSIBM  CHARACTER       32      0       Yes  
+LOCATION		SYSIBM  CHARACTER       64      0       Yes  
+SERIALNUMBER		SYSIBM  CHARACTER       19      0       Yes  
+CPU			SYSIBM  INTEGER 	4       0       Yes  
+COUNT			SYSIBM  INTEGER 	4       0       Yes  
+CTLACTION		SYSIBM  VARCHAR 	256     0       Yes
+MESSAGE			SYSIBM  VARCHAR 	1024    0       Yes
+DIAGS			SYSIBM  CHARACTER       1       0       No
+QUALIFIER		SYSIBM  CHARACTER       32      0       Yes
 ```
 
 In the above example, /home/fti/Catalog-project/miralog is the directory containing the original RAS log data files, whose extensions are csv.  

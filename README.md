@@ -53,7 +53,7 @@ This part discusses how to parse and filter the data
 	- *Script*: CollectWarnFatalMessages.sh  
 	- *Source Code*: analysis.RAS.CollectWarnFatalMessages.java  
 	- *Usage*: java analysis.RAS.CollectWarnFatalMessags [schemaPath] [severity_index] [file or directory: -f/-d] [logDir/logFile] [log_extension]  
-	- *Example*: Example: java -Xmx50000m CollectWarnFatalMessags /home/fti/Catalog-project/miralog/schema/basicSchema.txt 4 -d /home/fti/Catalog-project/miralog csv  
+	- *Example*: Example: java -Xmx50000m CollectWarnFatalMessags /home/sdi/Catalog-project/miralog/schema/basicSchema.txt 4 -d /home/sdi/Catalog-project/miralog csv  
 
 *schema file* is used to specify the format of the log data. For example, in MIRA RAS log, the basicScheme.txt looks like this:  
 
@@ -77,7 +77,7 @@ DIAGS			SYSIBM  CHARACTER       1       0       No
 QUALIFIER		SYSIBM  CHARACTER       32      0       Yes
 ```
 
-In the above example, /home/fti/Catalog-project/miralog is the directory containing the original RAS log data files, whose extensions are csv.  
+In the above example, /home/sdi/Catalog-project/miralog is the directory containing the original RAS log data files, whose extensions are csv.  
 Some examples are showns below:  
 ```
 [sdi@sdihost RasLog]$ ls
@@ -101,7 +101,7 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 	- *Script*: -  
 	- *Source Code*: filter.ClassifyLogBasedonMessageID.java  
 	- *Usage*: java filter.ClassifyLogBasedonMessageID [inputLogFile] [outputDir]  
-	- *Example*: java ClassifyLogBasedonMessageID /home/fti/Catalog-project/miralog/totalFatalMsg.fat /home/fti/Catalog-project/miralog/FilterAndClassify
+	- *Example*: java ClassifyLogBasedonMessageID /home/sdi/Catalog-project/miralog/totalFatalMsg.fat /home/sdi/Catalog-project/miralog/FilterAndClassify
 
 > *inputLogFile* refers to the file containing all the fatal messages (assuming you are focused on only fatal messages in the study).  
 *outputDir* refers to the directory that will contain the output results. 
@@ -123,7 +123,7 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 	- *Script*: TemporalSpatialFilter.sh
 	- *Source Code*: filter.TemporalSpatialFilter.java
 	- *Usage*: java filter.TemporalSpatialFilter [-t/-s/-ts] [classifiedLogDir] [extension] [maintenance-time-file] [outputDir]
-	- *Example 1*: java TemporalSpatialFilter -t /home/fti/Catalog-project/miralog/FilterAndClassify ori /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/fti/Catalog-project/miralog/FilterAndClassify  
+	- *Example 1*: java TemporalSpatialFilter -t /home/sdi/Catalog-project/miralog/FilterAndClassify ori /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/sdi/Catalog-project/miralog/FilterAndClassify  
 	- *Example 2*: java TemporalSpatialFilter -ts /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify ori /home/sdi/Work/Catalog-project/Catalog-data/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify  
 
 > *-t/-s/-ts* indicates only-temporal filter, only spatial-filter or temporal-spatial filter.  
@@ -220,7 +220,7 @@ The snapshot of one job log file is shown below:
 	- *Script*: -
 	- *Source Code*: analysis.Job.CalculateFailuresBasedonUsers.java
 	- *Usage*: java CalculateFailuresBasedonUsers [wlLengthFailureFile] [proj_exit_file_fs] [proj_exit_file_pe] [proj_outputFile] [user_exit_file_fs] [user_exit_file_pe] [user_outputFile]  
-	- *Example*: java CalculateFailuresBasedonUsers /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/lengthAnalysis/breakWCJobList.ori /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/projFailure.out /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/userFailure.out
+	- *Example*: java CalculateFailuresBasedonUsers /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/lengthAnalysis/breakWCJobList.ori /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.fs /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.pe90 /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/projFailure.out /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.fs /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.pe90 /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/userFailure.out
 
 > *hints* :  
 > * We omit the detailed description to the job-related analysis commands. 
@@ -234,11 +234,11 @@ In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ExtractValueTypes4EachField
 	- *Usage*: java ExtractValueType4EachField [schema] [inputDir] [extension] [outputDir]
-	- *Example*: java ExtractValueType4EachField /home/sdi/eventlog/schema/basicSchema.txt /home/sdi/eventlog csv /home/fti/eventlog/schema/fullSchema
+	- *Example*: java ExtractValueType4EachField /home/sdi/eventlog/schema/basicSchema.txt /home/sdi/eventlog csv /home/sdi/eventlog/schema/fullSchema
 		
 > The output is a directory that contains multiple files each containing the types of values for one field. 
 The output involves two types: 'withRatio' and 'withCount'. 'withRatio' means the value types will be associated with a percentage of the portion; while the 'withCount' means being associated with the number of values. 
-Some examples are shown below:  
+Some examples are shown below:  (Note: below are just examples showing how the output would looks like. The specific ratios/count numbers may different with different checking time intervals of the log. )
 
 > The example 'withRatio': the percentage % is shown with the value type.
 ```
@@ -286,41 +286,71 @@ Software_Error 239
 ```
 
 - **Gererate state features**
-	- *Script*: -
+	- *Script*: GenerateStateFeaturs.sh
 	- *Source Code*: analysis.RAS.GenerateStateFeatures
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
+	- *Example*: java GenerateStateFeatures /home/sdi/Catalog-project/miralog/schema/basicSchema.txt /home/sdi/Catalog-project/miralog/schema/fullSchema/withCount fsc /home/sdi/Catalog-project/miralog csv /home/sdi/Catalog-project/miralog/featureState CATEGORY COMPONENT CPU CTLACTION LOCATION MSG_ID SEVERITY
 
-- **Build fieldValueCombination, i.e., the dir fieldValueCombination**  
-	- *Script*: -
+> This function is to generate the state features, in order to calculate the posterior probability based on observed evidences. By 'state', we mean the a specific target value of a field whose probability will be calculated. 
+For instance, the users may want to what is the probability of COMPONENT=CNK when MSG_ID=00010001 and CATEGORY=Software_error. In this example, COMPONENT=CNK is the target state, and MSG_ID=00010001 and CATEGORY=Software_error is called 'evidence'. The across-field correlation analysis can answer this question. 
+
+- **Construct value-combination pool based on schema and featureStates**  
+	- *Script*: BuildFieldValueCombination.sh
 	- *Source Code*: analysis.RAS.BuildFieldValueCombination
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java BuildFieldCombination [maxElementCount] [basicSchemaFile] [fullSchemaDir] [extension] [featureStateDir] [fsExt] [outputDir] [fieldNames....]
+	- *Example*: java BuildFieldCombination 5 /home/sdi/Catalog-project/miralog/schema/basicSchema2.txt /home/sdi/Catalog-project/miralog/schema/fullSchema/withRatio fsr /home/sdi/Catalog-project/miralog/featureState pr /home/sdi/Catalog-project/miralog/fieldCombination CATEGORY COMPONENT CTLOCATION MSG_ID SEVERITY 
 
-> Three choices:  
-	<1> component vs. severity   
-	<2> component vs. category  
-	<3> category vs. severity  
+>output: the directory fieldCombination that contains the value-combination probability pool.
 	
-- **Generate vc.count file in the dir fieldValueCombination**
+- **Calculate the number of value combinations by brute-force method**
+(valid for both RAS and Job log)
 
-	- *Script*: -
+	- *Script*: CalculateCountsForValueCombinations.sh
 	- *Source Code*: analysis.RAS.CalculateCountsForValueCombinations
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java CalculateCountsForValueCombinations [basicSchemaFile] [fullSchemaDir] [fullSchemaExt] [logDir] [extension] [outputFile] [fields....]
+	- *Example*: java CalculateCountsForValueCombinations /home/sdi/Catalog-project/miralog/schema/basicSchema.txt /home/sdi/Catalog-project/miralog/schema/fullSchema/withRatio fsr /home/sdi/Catalog-project/miralog csv /home/sdi/Catalog-project/miralog/fieldValueCombination CATEGORY COMPONENT CTLACTION MSG_ID SEVERITY
+	
+> output: Generate vc.count file in the dir fieldValueCombination.
 	
 - **Generate analysis for inputMsg.txt**	
 	
-	- *Script*: -
+	- *Script*: ComputePostProbabilityBasedonMsg.sh
 	- *Source Code*: analysis.RAS.ComputePostProbabilityBasedonMsg
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ComputePostProbabilityBasedonMsg [fieldListFile] [vcCountHashMapFile] [inputMessageFile] [outputResultFile] [confidenceLevel]
+	- *Example*: java ComputePostProbabilityBasedonMsg /home/sdi/Catalog-project/miralog/fieldValueCombination/fieldList.txt /home/sdi/Catalog-project/miralog/fieldValueCombination/vc.count "/home/sdi/Catalog-project/miralog/inputMsg.txt" /home/sdi/Catalog-project/miralog/analyzeMsg 0.95
 	
-- **Generate errLocDistribution directory**	
-	- *Script*: -
+> This function is to compute the posterior probability based on given messages (inputMessageFile contains the given messages), and then select the target states in terms of the specified confidence level.
+> In the above demonstration, the example inputMsg.txt can be found in the directory - example-input of the package. It contains three messagses. 
+> The ComputePostProbabilityBasedonMsg function analyzes the occurence probability across fields. 
+
+> output: the directory analyzeMsg (there is an example in the direcotry example-output of package)
+> 0.prob corresponds to the first message in inputMsg.txt.
+> "2:Card,12:END_JOB ==> 1:000400ED : 1.0" indicatees that the case with COMPONENT=Card and CTLACTION=END_JOB will definitely belong to MSG_ID=000400ED.
+```
+[sdi@sdihost analyzeMsg]$ ls 
+0.prob  1.prob  2.prob
+[sdi@sdihost analyzeMsg]$ cat 0.prob
+# MSG_ID 1 ; CATEGORY 2 ; COMPONENT 3 ; SEVERITY 4 ; CTLACTION 12 
+# 39684092,000400ED,Card            ,MC              ,FATAL   ,2015-04-20-21.38.10.221308,,MIR-00000-73FF1-16384           ,R02-M1-N14                                                      ,00E5792YL10K135702C,,,END_JOB,FREE_COMPUTE_BLOCK ; BOARD_IN_ERROR ; Detected that this board has become unusable,F, 906789997                       ,74
+16:74 ==> 1:000400ED : 1.0
+2:Card,12:END_JOB ==> 1:000400ED : 1.0
+3:MC,12:END_JOB ==> 1:000400ED : 1.0
+1:000400ED ==> 2:Card : 1.0
+16:74 ==> 2:Card : 1.0
+3:MC,12:END_JOB ==> 2:Card : 1.0
+1:000400ED ==> 3:MC : 1.0
+16:74 ==> 3:MC : 1.0
+......
+```
+
+- **Generate spatial distribution (to be plotted on graph by plot.PlotMiraGraph later on)**	
+	- *Script*: ComputeErrorDistribution.sh
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ComputeErrorDistribution [[filterFieldIndex] [filterValue] ....] [logDir] [logExtension] [locationIndex] [separator] [outputDir] [merge/separate] [isAND (or OR)]
+	- *Example 1*: java ComputeErrorDistribution 4 FATAL 13 END_JOB /home/sdi/Catalog-project/miralog csvtmp 8 - /home/sdi/Catalog-project/miralog/errLocDistribution merge true
+	- *Example 2*: java ComputeErrorDistribution 4 FATAL 1 00062001 /home/sdi/Catalog-project/miralog csvtmp 8 - /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 merge false 
+	
+	
 	
 #### Regarding the job scheduling log (Cobalt)
 	

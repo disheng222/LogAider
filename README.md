@@ -34,11 +34,17 @@ After installing JDK, you are ready to use LogAider by running the corresponding
 LogAider provides a rich set of analysis functions as listed below, for mining the correlations of events in a Reliability, Availability and Serviablity (RAS) log.
 In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as an example. We provide flexible schema files for users to edit, in order to adapt to other systems. 
 
+### Parsing and Filtering
+
+This part discusses how to parse and filter the data
+
+#### Regarding RAS log
+
 - **Extract all warn and fatal messages from original log**
-> *script*: CollectWarnFatalMessages.sh  
-*source code*: analysis.RAS.CollectWarnFatalMessages.java  
-*Usage*: java CollectWarnFatalMessags [schemaPath] [severity_index] [file or directory: -f/-d] [logDir/logFile] [log_extension]  
-*Example*: Example: java CollectWarnFatalMessags /home/fti/Catalog-project/miralog/schema/basicSchema.txt 4 -d /home/fti/Catalog-project/miralog csv  
+	- *Script*: CollectWarnFatalMessages.sh  
+	- *Source Code*: analysis.RAS.CollectWarnFatalMessages.java  
+	- *Usage*: java analysis.RAS.CollectWarnFatalMessags [schemaPath] [severity_index] [file or directory: -f/-d] [logDir/logFile] [log_extension]  
+	- *Example*: Example: java -Xmx50000m CollectWarnFatalMessags /home/fti/Catalog-project/miralog/schema/basicSchema.txt 4 -d /home/fti/Catalog-project/miralog csv  
 
 *schema file* is used to specify the format of the log data. For example, in MIRA RAS log, the basicScheme.txt looks like this:  
 
@@ -74,13 +80,328 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 13113417,"0008002F","BQC","FIRMWARE","INFO","2013-04-01 00:00:42.806127",180268,"MIR-44400-77771-1024","R1C-M0-N12-J14","00E5870YL1FB227033C",8,27355,"","L1P Correctable Error Summary : count=27355 cores=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 L1P_ESR : [ERR_RELOAD_ECC_X2] correctable reload data ECC error;","F","50419698                        ","mira"
 13113418,"00080030","BQC","FIRMWARE","INFO","2013-04-01 00:00:42.807463",180268,"MIR-44400-77771-1024","R1C-M0-N12-J14","00E5870YL1FB227033C",8,400,"","L2 Array Correctable Error Summary : count=400 slices=10 L2_INTERRUPT_STATE error status:  [EDR_CE] Coherence array correctable error;","F","50419698                        ","mira"
 13113419,"0006100E","Optical_Module","MMCS","WARN","2013-04-01 00:00:51.477275","","","R21-M0-N09-O13","","","","","Health Check detected an abnormal condition for the optical module at location R21-M0-N09-O13.  The condition is related to POWER 11 .","F","","mira"
-
+.....
 ```
 
+> *hint* :   
+> * *-Xmx50000m* means applying for 50GB for JVM to run this test. The size of memory required depends on the data items you need to process.  
+> * If you encounter the error 'java.lang.OutOfMemoryError: Java heap space', this means you need to increase the memory size by using -Xmx.  
+> * All the java classes need to be run using java <the full path of program> <arguments...>: e.g., java analysis.RAS.CollectWarnFatalMessags .... instead of java CollectWarnFatalMessags ....
 
+- **Classify Log Based on MessageID**
+	- *Script*: -  
+	- *Source Code*: filter.ClassifyLogBasedonMessageID.java  
+	- *Usage*: java filter.ClassifyLogBasedonMessageID [inputLogFile] [outputDir]  
+	- *Example*: java ClassifyLogBasedonMessageID /home/fti/Catalog-project/miralog/totalFatalMsg.fat /home/fti/Catalog-project/miralog/FilterAndClassify
 
+> *inputLogFile* refers to the file containing all the fatal messages (assuming you are focused on only fatal messages in the study).  
+*outputDir* refers to the directory that will contain the output results. 
 
+> The output will look as follows: 
+```
+[sdi@sdihost FilterAndClasify]$ ls
+00010001.fltr  00040028.ori   0004009A.ori   000400E7.ori   00040122.ori   00040144.ori   00062005.ori   0008000B.ori   00080029.ori   00090101.ori   00090213.ori   000B0005.ori
+00010001.ori   00040037.fltr  000400A0.fltr  000400ED.fltr  00040124.fltr  00040148.fltr  00070214.fltr  0008000C.fltr  0008003A.fltr  00090102.fltr  00090216.fltr  allEvents-2015.txt
+00010007.fltr  00040037.ori   000400A0.ori   000400ED.ori   00040124.ori   00040148.ori   00070214.ori   0008000C.ori   0008003A.ori   00090102.ori   00090216.ori   allEvents.txt
+00010007.ori   00040058.fltr  000400A5.fltr  000400EE.fltr  00040125.fltr  0004014A.fltr  00070219.fltr  00080014.fltr  0008003D.fltr  00090103.fltr  00090217.fltr  FFFE0015.fltr
+0001000A.fltr  00040058.ori   000400A5.ori   000400EE.ori   00040125.ori   0004014A.ori   00070219.ori   00080014.ori   0008003D.ori   00090103.ori   00090217.ori   FFFE0015.ori
+......
+```
 
+> The file names are the message IDs, and the extensions refer to original messages (.ori) or filtered messages (.fltr). 
 
+- **TemporalSpatialFilter**
+	- *Script*: TemporalSpatialFilter.sh
+	- *Source Code*: filter.TemporalSpatialFilter.java
+	- *Usage*: java filter.TemporalSpatialFilter [-t/-s/-ts] [classifiedLogDir] [extension] [maintenance-time-file] [outputDir]
+	- *Example 1*: java TemporalSpatialFilter -t /home/fti/Catalog-project/miralog/FilterAndClassify ori /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/fti/Catalog-project/miralog/FilterAndClassify  
+	- *Example 2*: java TemporalSpatialFilter -ts /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify ori /home/sdi/Work/Catalog-project/Catalog-data/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify  
 
+> *-t/-s/-ts* indicates only-temporal filter, only spatial-filter or temporal-spatial filter.  
+*classifiedLogDir* is the output dir pointed out by filter.ClassifyLogBasedonMessageID.  
+*extension* is the extension of the classified files in the *classified dir*  
+*maintenance-time-file* is the file containig the maintainance periods  
+*outputDir* is the output directory that will cotnaint the filtered log data results. 
 
+> The content of maintenance-time-file is shown below: 
+```
+2013-04-01 14:00:09,2013-04-02 01:13:42
+2013-04-08 14:00:17,2013-04-09 00:34:52
+2013-04-15 14:00:04,2013-04-15 21:27:55
+2013-04-22 14:00:07,2013-04-23 00:32:10
+2013-04-29 14:00:05,2013-04-30 01:04:23
+2013-05-06 14:00:21,2013-05-06 23:06:17
+2013-05-13 14:00:15,2013-05-14 00:08:54
+2013-05-22 22:30:13,2013-05-22 23:22:25
+2013-05-23 22:30:04,2013-05-24 03:29:49
+2013-05-24 17:00:00,2013-05-25 02:50:02
+2013-05-28 14:00:14,2013-05-29 00:26:31
+2013-06-03 14:00:04,2013-06-03 22:19:53
+2013-06-10 14:00:05,2013-06-11 04:55:29
+2013-06-17 11:00:09,2013-06-18 00:00:46
+2013-06-24 14:30:04,2013-06-25 02:43:38
+......
+```
+
+> In the outputDir, there will be a new sub-directory generated for storing the further filtered messages, e.g., no-Maint-filter-interval=1800s_43200s, as shown below, 
+where no-Maint-filter means it excludes the maintenance periods as specified by the maintenance-time-file, and interval=1800s_43200s refers to the two window sizes used to control the filtering.
+The details can be found in our CCGrid17 paper. 
+
+```
+00010001.fltr  00040028.ori   0004009A.ori   000400E7.ori   00040122.ori   00040144.ori   00062005.ori   0008000B.ori   00080029.ori   00090101.ori   00090213.ori   000B0005.ori
+00010001.ori   00040037.fltr  000400A0.fltr  000400ED.fltr  00040124.fltr  00040148.fltr  00070214.fltr  0008000C.fltr  0008003A.fltr  00090102.fltr  00090216.fltr  allEvents-2015.txt
+00010007.fltr  00040037.ori   000400A0.ori   000400ED.ori   00040124.ori   00040148.ori   00070214.ori   0008000C.ori   0008003A.ori   00090102.ori   00090216.ori   allEvents.txt
+00010007.ori   00040058.fltr  000400A5.fltr  000400EE.fltr  00040125.fltr  0004014A.fltr  00070219.fltr  00080014.fltr  0008003D.fltr  00090103.fltr  00090217.fltr  FFFE0015.fltr
+0001000A.fltr  00040058.ori   000400A5.ori   000400EE.ori   00040125.ori   0004014A.ori   00070219.ori   00080014.ori   0008003D.ori   00090103.ori   00090217.ori   FFFE0015.ori
+0001000A.ori   00040059.fltr  000400AA.fltr  000400F8.fltr  00040131.fltr  0004014D.fltr  0007021C.fltr  00080016.fltr  00090001.fltr  00090104.fltr  000A0003.fltr  no-Maint-filter-interval=1800s_43200s
+``` 
+
+#### Regarding job scheduling log (Cobalt)
+
+- ** Extract all error messages (with non-exit code)**
+	- *Script*: -
+	- *Source Code*: analysis.Job.CollectErrorMessages.java
+	- *Usage*: java analysis.Job.CollectErrorMessages [schemaPath] [severity_index] [logDir] [log_extension]  
+	- *Example*: java analysis.Job.CollectErrorMessages /home/sdi/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt 14 /home/sdi/Catalog-project/miralog/RAS-Job/Job csv  
+	
+> *basicSchema.txt* for the jog scheduling log (Cobalt), for example, will look as follows: 
+```
+QUEUED_TIMESTAMP
+START_TIMESTAMP
+END_TIMESTAMP
+QUEUED_DATE_ID
+START_DATE_ID
+END_DATE_ID
+RUNTIME_SECONDS
+WALLTIME_SECONDS
+REQUESTED_CORES
+USED_CORES
+REQUESTED_NODES
+USED_NODES
+REQUESTED_CORE_HOURS
+REQUESTED_CORE_SECONDS
+USED_CORE_HOURS
+USED_CORE_SECONDS
+COBALT_PROJECT_NAME_GENID
+COBALT_USER_NAME_GENID
+MACHINE_PARTITION
+EXIT_CODE
+QUEUE_GENID
+MODE
+MACHINE_NAME
+RESID
+DELETED_BY_GENID
+JOBID
+PROJECT_NAME_GENID
+```
+
+> In our example, MIRA log, the job log is also stored in the form of csv, similar to RAS log, but it has different schema.  
+The snapshot of one job log file is shown below:   
+```
+#"QUEUED_TIMESTAMP","START_TIMESTAMP","END_TIMESTAMP","QUEUED_DATE_ID","START_DATE_ID","END_DATE_ID","RUNTIME_SECONDS","WALLTIME_SECONDS","REQUESTED_CORES","USED_CORES","REQUESTED_NODES","USED_NODES","REQUESTED_CORE_HOURS","REQUESTED_CORE_SECONDS","USED_CORE_HOURS","USED_CORE_SECONDS","COBALT_PROJECT_NAME_GENID","COBALT_USER_NAME_GENID","MACHINE_PARTITION","EXIT_CODE","QUEUE_GENID","MODE","MACHINE_NAME","RESID","DELETED_BY_GENID","JOBID","PROJECT_NAME_GENID"
+"2014-12-30 16:03:17.000000","2014-12-31 23:26:29.000000","2015-01-01 00:27:15.000000",20141230,20141231,20150101,"3646.0000","7200.0000","8192.0000","8192.0000","512.0000","512.0000","8296.6756","29868032.0000","8296.6756","29868032.0000",71848090445552,57948927142633,"MIR-088C0-3BBF1-512",0,89991570492271,"script","mira",-1,"",389021,68961232793033
+"2014-12-09 09:09:05.000000","2014-12-31 13:56:08.000000","2015-01-01 01:26:14.000000",20141209,20141231,20150101,"41406.0000","43200.0000","16384.0000","16384.0000","1024.0000","1024.0000","188443.3067","678395904.0000","188443.3067","678395904.0000",85022475703164,13148949161706,"MIR-00C00-33F71-1-1024",0,51795839728692,"script","mira",-1,"",378419,53366083443800
+"2014-12-18 17:39:38.000000","2014-12-31 18:19:21.000000","2015-01-01 00:19:58.000000",20141218,20141231,20150101,"21637.0000","21600.0000","65536.0000","65536.0000","4096.0000","4096.0000","393889.5644","1418002432.0000","393889.5644","1418002432.0000",55300184085639,68190251275985,"MIR-40000-737F1-4096",143,89991570492271,"c16","mira",-1,"",383815,51754639787485
+......
+```
+
+> *Output*: the above command will generate totalFatalMsg.fat, which contains only error messages regarding jobs.
+
+- ** Calculate job failures based on users**
+	- *Script*: -
+	- *Source Code*: analysis.Job.CalculateFailuresBasedonUsers.java
+	- *Usage*: java CalculateFailuresBasedonUsers [wlLengthFailureFile] [proj_exit_file_fs] [proj_exit_file_pe] [proj_outputFile] [user_exit_file_fs] [user_exit_file_pe] [user_outputFile]  
+	- *Example*: java CalculateFailuresBasedonUsers /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/lengthAnalysis/breakWCJobList.ori /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_PROJECT_NAME_GENID/COBALT_PROJECT_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/projFailure.out /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.fs /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/featureState/COBALT_USER_NAME_GENID/COBALT_USER_NAME_GENID-EXIT_CODE.pe90 /home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/cobalt/userFailure.out
+
+> *hints* :  
+> * We omit the detailed description to the job-related analysis commands. In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in the package analysis.Job. Please find the source codes there for details. 
+
+### Across-Field correlation
+
+#### Regarding RAS Log
+
+- **Generate fullSchema directory**
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ExtractValueTypes4EachField
+	- *Usage*: 
+	- *Example*: 
+
+- **Gererate state features**
+	- *Script*: -
+	- *Source Code*: analysis.RAS.GenerateStateFeatures
+	- *Usage*: 
+	- *Example*: 
+
+- **Build fieldValueCombination, i.e., the dir fieldValueCombination**  
+	- *Script*: -
+	- *Source Code*: analysis.RAS.BuildFieldValueCombination
+	- *Usage*: 
+	- *Example*: 
+
+> Three choices:  
+	<1> component vs. severity   
+	<2> component vs. category  
+	<3> category vs. severity  
+	
+- **Generate vc.count file in the dir fieldValueCombination**
+
+	- *Script*: -
+	- *Source Code*: analysis.RAS.CalculateCountsForValueCombinations
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate analysis for inputMsg.txt**	
+	
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ComputePostProbabilityBasedonMsg
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate errLocDistribution directory**	
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
+	- *Usage*: 
+	- *Example*: 
+	
+####	Regarding the job scheduling log (Cobalt)
+	
+- **Generate fullSchema directory**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ExtractValueTypes4EachField.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate state features**	
+	
+	- *Script*: -
+	- *Source Code*: analysis.Job.GenerateStateFeatures.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate vc.count file in the dir fieldValueCombination**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.CalculateCountsForValueCombinations.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate analysis for inputMsg.txt**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputePostProbabilityBasedonMsg.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate error distribution**  
+(This class is for generating/plotting the location distribution in the MIRA graph)
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Usage*: 
+	- *Example*: 
+	
+### Analyzing failure rate of components
+
+#### Regarding RAS Log
+
+- **Generate fatal-msg-count.txt, and monthly errors**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Usage*: 
+	- *Example*: 		
+	
+- **Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Usage*: 
+	- *Example*: 
+		
+- **Generate fatal-locationKey-count.txt**	
+	- *Script*: -
+	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Usage*: 
+	- *Example*: 
+	
+#### Regarding Job Log
+- **Generate lengthAnalysis directory**
+	- *Script*: -
+	- *Source Code*: analysis.Job.SearchJobswithBreakWallClockFailure.java
+	- *Usage*: 
+	- *Example*: 
+								
+### Plot error distribution
+(Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
+
+- **Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**
+	- *Script*: -
+	- *Source Code*: plot.PlotMiraGraph.java
+	- *Usage*: 
+	- *Example*: 
+
+### Generate monthly and daily Log Analysis Results
+
+- **use 'separate' mode to get monthly results**
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
+	- *Usage*: 
+	- *Example*: 
+	
+- **Generate monthly data results for category and component**
+	- *Script*: -
+	- *Source Code*: filter.Summarize_MonthlyFailureRate.java
+	- *Usage*: 
+	- *Example*: 
+
+- **Compute Daily Count**
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ComputeDailyFilteredCount.java
+	- *Usage*: 
+	- *Example*: 
+
+### Analyze the error propagation
+(This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
+
+- **Analyze the error propagation (with the same type): if a fatal event happens, it will probably happen again within x hours?**
+	- *Script*: -
+	- *Source Code*: analysis.RAS.ComputeTmporalErrPropagation.java
+	- *Usage*: 
+	- *Example*: 
+
+### Analyze Spatial-correlation
+
+- ** ChiSquared Sygnificance Test**
+(first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)
+	- *Script*: -
+	- *Source Code*: analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java
+	- *Usage*: 
+	- *Example*: 
+	
+	- *Script*: -
+	- *Source Code*: analysis.significance.ChiSquareSingleTest.java
+	- *Usage*: 
+	- *Example*: 
+	
+	
+- ** K means clustering analysis **
+( analysis.spatialcorr.kmeans.KMeansSolution (2 versions of outputs) and analysis.spatialcorr.kmeans.KMeansOpt (4 versions of outputs))
+
+	- *Script*: -
+	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
+	- *Usage*: 
+	- *Example*: 
+
+	- *Script*: -
+	- *Source Code*: analysis.spatialcorr.kmeans.KMeansOpt
+	- *Usage*: 
+	- *Example*: 
+
+> Plot the K means clustering results:  
+> input (kmeans clustering matrix - output of KMeansSolution or KMeansOpt); output (gnuplot file)
+	- *Script*: -
+	- *Source Code*: plot.PlotKMeansMidplanes
+	- *Usage*: 
+	- *Example*: 	
+	

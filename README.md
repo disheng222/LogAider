@@ -20,7 +20,7 @@ temporal correlations (or error propagations) over a certain
 period inside a log or across multiple logs, based on an effective
 similarity analysis strategy. 
 
-This code corresponds to the paper published in CCGrid2017: "LogAider - A tool for mining potential correlations in HPC system logs".
+This code corresponds to the paper published in CCGrid2017: [LogAider - A tool for mining potential correlations in HPC system logs](https://ieeexplore.ieee.org/document/7973730/).
 
 ##Dependency
 

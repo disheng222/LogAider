@@ -1,0 +1,17 @@
+1.  RECID: the unique id for this message
+2.  MSG_ID: message id (i.e., the type of the message)
+3.  1CATEGORY: the category used to categorize the message by type of error (related the optical module on the node boards as suspected by the manager - Susan)
+4.  1COMPONENT: such as MMCS (control system software)
+5.  2SEVERITY: the secure level of the message (such as WARN, INFO, ...)
+6.  xEVENT_TIME: time of the message (format: year-month-day-hr.min.sec.msec, example: 2015-04-03-17.30.26.691211)
+7.  xJOBID: blue gene control system jobid
+8.  xBLOCK: the partition name
+9.  3LOCATION: racknumber-midplannumber-nodeboard-nodelocation, example: R01-M0-N05-O15 (the last one O15 refers to node location on the node board)
+10. xSERIALNUMBER:  serial # of the hardware
+11. 3CPU: Unknown yet (Susan is confused too)
+12. xCOUNT: the number of the messages seen in a period (note: some messages are actually summary of the messages not corresponding to a particular event)
+13. xCTLACTION: list of control system actions taken
+14. 1MESSAGE: text description of the message
+15. xDIAGS: Unknown yet 
+16. ?QUALIFIER: Unknown yet 
+

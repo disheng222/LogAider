@@ -1,7 +1,35 @@
 LogAider
 ========
 
-Description
+- [Description](#1)
+- [Dependencies](#2)
+- [How to use LogAider](#3)
+	- *1. Parsing and Filtering*
+		- Regarding RAS log
+			- Extract all warn and fatal messages from original log
+			- Classify Log Based on MessageID
+		- Regarding job scheduling log (Cobalt)
+			- Extract all error messages (with non-exit code)
+	- *2. Across-Field correlation*
+		- Regarding RAS Log
+			- Extract value types for each field
+			- Gererate state features
+			- Construct value-combination pool based on schema and featureStates
+			- Calculate the number of value combinations by brute-force method
+			- Calculate the number of value combinations by brute-force method
+			- Generate analysis for inputMsg.txt
+			- Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)
+		- Regarding the job scheduling log (Cobalt)
+			- Generate fullSchema directory
+			- Generate state features
+			- Generate state features
+	- *3. Plot error distribution*
+	- *4. Generate monthly and daily Log Analysis Results*
+	- *5. Analyze the error propagation*
+	- *6. Analyze Spatial-correlation*
+			
+
+<a id="1"/>Description</a>
 -----------
 
 Today’s large-scale supercomputers are producing
@@ -31,7 +59,7 @@ The Mira RAS log data are available to download from [https://reports.alcf.anl.g
 The above log data page includes all severity levels of messages (including INFO, WARN and FATAL). If you are interested in only fatal events, we already extracted them to be [here](fatalevents/totalFatalMsg.fat.tar.gz).
 You can also extract the fatal events by yourself using analysis.RAS.CollectWarnFatalMessags (requiring a huge memory setting though), which will be described later.
 
-Dependencies
+<a id="2"/>Dependencies</a>
 -----------
 
 LogAider is coded in Java, so you need to install JDK 1.8+
@@ -59,7 +87,7 @@ This part discusses how to parse and filter the data
 	- *Usage*: java analysis.RAS.CollectWarnFatalMessags [schemaPath] [severity_index] [file or directory: -f/-d] [logDir/logFile] [log_extension]  
 	- *Example*: Example: java -Xmx50000m CollectWarnFatalMessags /home/sdi/Catalog-project/miralog/schema/basicSchema.txt 4 -d /home/sdi/Catalog-project/miralog csv  
 
-*schema file* is used to specify the format of the log data. For example, in MIRA RAS log, the basicScheme.txt looks like this:  
+> *schema file* is used to specify the format of the log data. For example, in MIRA RAS log, the basicScheme.txt looks like this:  
 
 ```
 #Column 		name    schema  	Data type name  Length
@@ -81,7 +109,7 @@ DIAGS			SYSIBM  CHARACTER       1       0       No
 QUALIFIER		SYSIBM  CHARACTER       32      0       Yes
 ```
 
-In the above example, /home/sdi/Catalog-project/miralog is the directory containing the original RAS log data files, whose extensions are csv.  
+> In the above example, /home/sdi/Catalog-project/miralog is the directory containing the original RAS log data files, whose extensions are csv.  
 Some examples are showns below:  
 ```
 [sdi@sdihost RasLog]$ ls

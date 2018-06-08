@@ -25,7 +25,7 @@ LogAider
 			- Generate state features
 	- [*3. Plot error distribution*](#3.3)
 	- [*4. Generate monthly and daily Log Analysis Results*](#3.4)
-	- [*5. Analyze the error propagation*](#3.5)
+	- [*5. Analyze the error propagation (similarity-based filter)*](#3.5)
 	- [*6. Analyze Spatial-correlation*](#3.6)
 			
 
@@ -497,7 +497,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 
-### <a id="3.5"/>5. Analyze the error propagation</a>
+### <a id="3.5"/>5. Analyze the error propagation (similarity-based filter)</a>
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
 - **Analyze the error propagation (with the same type): if a fatal event happens, it will probably happen again within x hours?**

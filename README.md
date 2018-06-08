@@ -343,15 +343,27 @@ For instance, the users may want to what is the probability of COMPONENT=CNK whe
 ......
 ```
 
-- **Generate spatial distribution (to be plotted on graph by plot.PlotMiraGraph later on)**	
+- **Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)**	
 	- *Script*: ComputeErrorDistribution.sh
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
 	- *Usage*: java ComputeErrorDistribution [[filterFieldIndex] [filterValue] ....] [logDir] [logExtension] [locationIndex] [separator] [outputDir] [merge/separate] [isAND (or OR)]
-	- *Example 1*: java ComputeErrorDistribution 4 FATAL 13 END_JOB /home/sdi/Catalog-project/miralog csvtmp 8 - /home/sdi/Catalog-project/miralog/errLocDistribution merge true
-	- *Example 2*: java ComputeErrorDistribution 4 FATAL 1 00062001 /home/sdi/Catalog-project/miralog csvtmp 8 - /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 merge false 
+	- *Example 1*: java ComputeErrorDistribution 4 FATAL 12 END_JOB /home/sdi/Catalog-project/miralog csv 8 - /home/sdi/Catalog-project/miralog/errLocDistribution merge true
+	- *Example 2*: java ComputeErrorDistribution 4 FATAL 1 00062001 /home/sdi/Catalog-project/miralog csv 8 - /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 merge false 
 	
-	
-	
+> *[[filterFieldIndex] [filterValue] ....]* indicates the key-value pairs to be used for the spatial-correlation analysis. In the example 1, the user specifies
+SEVERITY=FATAL and CTLOCATION=END_JOB used to filter the messages. 
+> *[logDir]* such as /home/sdi/Catalog-project/miralog indictes the directory containing the csv log files. 
+> *[logExtension]* such as csv is the extension of the log file
+> *[locationIndex]* indicates the index id of the location field. In the above example, the location field's index is 8, 
+e.g., the location information R02-M1-N14 is the 8th field in the following message (index count starts with 0). 
+```
+39684092,000400ED,Card,MC,FATAL,2015-04-20-21.38.10.221308,,MIR-00000-73FF1-16384,R02-M1-N14-J12,00E5792YL10K135702C,,,END_JOB,FREE_COMPUTE_BLOCK ; BOARD_IN_ERROR ; Detected that this board has become unusable,F, 906789997,74
+```
+> *[seperator]* indicates how to separate the location value "R02-M1-N14-J12", using '-' in this above example.
+> *[outputDir]* specifies the output dir
+> *[merge/seperate]* specifies the way of outputing the spatial analysis results. For instance, 'seperate' will store the results in four different files level0.err, level1.err, level2.err and level3.err, separately. Each file stores the statistical results with the corresponding level/layer (Rack, midplane, node board and compute card).
+> *[isAND (or OR)]* specifies the operator to be applied on the multiple key-value pairs. For instance, int he example 1, it adopts 'true', meaning SEVERITY=FATAL **AND** CTLOCATION=END_JOB will be used to filter the messages. 
+
 #### Regarding the job scheduling log (Cobalt)
 	
 - **Generate fullSchema directory**	

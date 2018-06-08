@@ -22,6 +22,8 @@ similarity analysis strategy.
 
 This code corresponds to the paper published in CCGrid2017: [LogAider - A tool for mining potential correlations in HPC system logs](https://ieeexplore.ieee.org/document/7973730/).
 
+The Mira RAS log data are available to download from here: https://reports.alcf.anl.gov/data/mira.html
+
 ##Dependency
 
 LogAider is coded in Java, so you need to install JDK 1.8+

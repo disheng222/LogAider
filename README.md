@@ -23,18 +23,26 @@ LogAider
 			- [Extract value types for each field](#3.2.2.1)
 			- [Generate state features](#3.2.2.2)
 			- [Generate state features](#3.2.2.3)
-	- [*3. Plot error distribution*](#3.3)
-	- [*4. Generate monthly and daily Log Analysis Results*](#3.4)
-		- [use 'separate' mode to get monthly results](#3.4.1)
-		- [Generate monthly data results for category and component](#3.4.2)
-		- [Compute Daily Count](#3.4.3)
-	- [*5. Analyze the error propagation (similarity-based filter)*](#3.5)
-		- [Analyze the error propagation (with the same type)](#3.5.1)
-	- [*6. Analyze Spatial-correlation*](#3.6)
-		- [ChiSquared Sygnificance Test](#3.6.1)
-		- [K means clustering analysis](#3.6.2)
-			- [Generate K-means Clustering results](#3.6.2.1)
-			- [Plot the K means clustering results](#3.6.2.2)
+	- [*3. Analyze failure rate of components](#3.3)
+		- [Analysis based on RAS Log](#3.3.1)
+			- [Generate fatal-msg-count.txt and monthly errors](#3.3.1.1)
+			- [Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)](#3.3.1.2)
+			- [Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)](#3.3.1.3)
+			- [Generate fatal-locationKey-count.txt*](#3.3.1.4)
+		- [Analysis based on Job Log](#3.3.2)
+			- [Generate lengthAnalysis directory by searching jobs with break-wallclock-failures](#3.3.2.1)
+	- [*4. Plot error distribution*](#3.4)
+	- [*5. Generate monthly and daily Log Analysis Results*](#3.5)
+		- [use 'separate' mode to get monthly results](#3.5.1)
+		- [Generate monthly data results for category and component](#3.5.2)
+		- [Compute Daily Count](#3.5.3)
+	- [*6. Analyze the error propagation (similarity-based filter)*](#3.6)
+		- [Analyze the error propagation (with the same type)](#3.6.1)
+	- [*7. Analyze Spatial-correlation*](#3.7)
+		- [ChiSquared Sygnificance Test](#3.7.1)
+		- [K means clustering analysis](#3.7.2)
+			- [Generate K-means Clustering results](#3.7.2.1)
+			- [Plot the K means clustering results](#3.7.2.2)
 			
 
 <a id="1"/>Description</a>
@@ -453,41 +461,42 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 
 #### <a id="3.3.1"/>Analysis based on RAS Log</a>
 
-- <a id="3.3.1.1"/>**Generate fatal-msg-count.txt, and monthly errors**	
+- <a id="3.3.1.1"/>**Generate fatal-msg-count.txt and monthly errors**	
 	- *Script*: -
-	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Source Code*: filter.Summarize1.java
 	- *Usage*: 
 	- *Example*: 
 	
 - <a id="3.3.1.2"/>**Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)**</a>
 	- *Script*: -
-	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Source Code*: filter.Summarize2.java
 	- *Usage*: 
 	- *Example*: 		
 	
 - <a id="3.3.1.3"/>**Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)**</a>	
 	- *Script*: -
-	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Source Code*: filter.Summarize3.java
 	- *Usage*: 
 	- *Example*: 
 		
 - <a id="3.3.1.4"/>**Generate fatal-locationKey-count.txt**</a>
 	- *Script*: -
-	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
+	- *Source Code*: filter.Summarize4.java
 	- *Usage*: 
 	- *Example*: 
 	
 #### <a id="3.3.2"/>Analysis based on Job Log</a>
-- <a id="3.3.2.1"/>**Generate lengthAnalysis directory**</a>
+
+- <a id="3.3.2.1"/>**Generate lengthAnalysis directory by searching jobs with break-wallclock-failures**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.SearchJobswithBreakWallClockFailure.java
 	- *Usage*: 
 	- *Example*: 
 								
-### <a id="3.3"/>3. Plot error distribution</a>
+### <a id="3.4"/>3. Plot error distribution</a>
 (Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
 
-- <a id="3.3.1"/>**Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**</a>
+- <a id="3.4.1"/>**Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**</a>
 	- *Script*: -
 	- *Source Code*: plot.PlotMiraGraph.java
 	- *Usage*: 
@@ -496,39 +505,39 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 > output: the gnuplot file that can be used to plot the graph using Gnuplot.  
 > example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg)
 
-### <a id="3.4"/>4. Generate monthly and daily Log Analysis Results</a>
+### <a id="3.5"/>4. Generate monthly and daily Log Analysis Results</a>
 
-- <a id="3.4.1"/>**use 'separate' mode to get monthly results**</a>
+- <a id="3.5.1"/>**use 'separate' mode to get monthly results**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
 	- *Usage*: 
 	- *Example*: 
 	
-- <a id="3.4.2"/>**Generate monthly data results for category and component**</a>
+- <a id="3.5.2"/>**Generate monthly data results for category and component**</a>
 	- *Script*: -
 	- *Source Code*: filter.Summarize_MonthlyFailureRate.java
 	- *Usage*: 
 	- *Example*: 
 
-- <a id="3.4.3"/>**Compute Daily Count**</a>
+- <a id="3.5.3"/>**Compute Daily Count**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeDailyFilteredCount.java
 	- *Usage*: 
 	- *Example*: 
 
-### <a id="3.5"/>5. Analyze the error propagation (similarity-based filter)</a>
+### <a id="3.6"/>5. Analyze the error propagation (similarity-based filter)</a>
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
-- <a id="3.5.1"/>**Analyze the error propagation (with the same type)**</a>
+- <a id="3.6.1"/>**Analyze the error propagation (with the same type)**</a>
 (if a fatal event happens, it will probably happen again within x hours?)
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeTmporalErrPropagation.java
 	- *Usage*: 
 	- *Example*: 
 
-### <a id="3.6"/>6. Analyze Spatial-correlation</a>
+### <a id="3.7"/>6. Analyze Spatial-correlation</a>
 
-#### <a id="3.6.1"/>**ChiSquared Sygnificance Test**</a>
+#### <a id="3.7.1"/>**ChiSquared Sygnificance Test**</a>
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java
@@ -541,10 +550,10 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Example*: 
 	
 	
-#### <a id="3.6.2"/>**K means clustering analysis**</a>
+#### <a id="3.7.2"/>**K means clustering analysis**</a>
 ( analysis.spatialcorr.kmeans.KMeansSolution (2 versions of outputs) and analysis.spatialcorr.kmeans.KMeansOpt (4 versions of outputs))
 
-- <a id="3.6.2.1"/>**Generate K-means Clustering results**</a>	
+- <a id="3.7.2.1"/>**Generate K-means Clustering results**</a>	
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
 	- *Usage*: 
@@ -555,7 +564,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 
-- <a id="3.6.2.2"/>**Plot the K means clustering results**</a>  
+- <a id="3.7.2.2"/>**Plot the K means clustering results**</a>  
 > input (kmeans clustering matrix - output of KMeansSolution or KMeansOpt); output (gnuplot file)
 	- *Script*: -
 	- *Source Code*: plot.PlotKMeansMidplanes

@@ -655,11 +655,14 @@ titleRepresentBase=hex
 ( analysis.spatialcorr.kmeans.KMeansSolution (2 versions of outputs) and analysis.spatialcorr.kmeans.KMeansOpt (4 versions of outputs))
 
 - <a id="3.7.2.1"/>**Generate K-means Clustering results**</a>	
+
+> The traditional solution: K means solution
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
 	- *Usage*: java KMeansSolution [allowDuplicate?] [inputFilePath]
 	- *Example*: -
 
+> The optimized solution (with optimized number of clusters)
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansOpt
 	- *Usage*: java KMeansOpt [kmeansSolType (fixK or optK)] [initNumOfSets] [allowDuplicate?] [inputFilePath]

@@ -1,9 +1,9 @@
 LogAider
 ========
 
-- [Description](#1)
-- [Dependencies](#2)
-- [How to use LogAider](#3)
+- [**Description**](#1)
+- [**Dependencies**](#2)
+- [**How to use LogAider**](#3)
 	- [*1. Parsing and Filtering*](#3.1)
 		- [Analysis based on RAS log](#3.1.1)
 			- [Extract all warn and fatal messages from original log](#3.1.1.1)
@@ -23,7 +23,7 @@ LogAider
 			- [Extract value types for each field](#3.2.2.1)
 			- [Generate state features](#3.2.2.2)
 			- [Generate state features](#3.2.2.3)
-	- [*3. Analyze failure rate of components](#3.3)
+	- [*3. Analyze failure rate of components*](#3.3)
 		- [Analysis based on RAS Log](#3.3.1)
 			- [Generate fatal-msg-count.txt and monthly errors](#3.3.1.1)
 			- [Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)](#3.3.1.2)

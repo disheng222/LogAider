@@ -95,7 +95,7 @@ This part discusses how to parse and filter the data
 
 #### <a id="3.1.1"/>Analysis based on RAS log</a>
 
-- **Extract all warn and fatal messages from original log**
+- <a id="3.1.1.1"/>**Extract all warn and fatal messages from original log**</a>
 	- *Script*: CollectWarnFatalMessages.sh  
 	- *Source Code*: analysis.RAS.CollectWarnFatalMessages.java  
 	- *Usage*: java analysis.RAS.CollectWarnFatalMessags [schemaPath] [severity_index] [file or directory: -f/-d] [logDir/logFile] [log_extension]  
@@ -143,7 +143,7 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 > * If you encounter the error 'java.lang.OutOfMemoryError: Java heap space', this means you need to increase the memory size by using -Xmx.  
 > * All the java classes need to be run using java <the full path of program> <arguments...>: e.g., java analysis.RAS.CollectWarnFatalMessags .... instead of java CollectWarnFatalMessags ....
 
-- **Classify Log Based on MessageID**
+- <a id="3.1.1.2"/>**Classify Log Based on MessageID**</a>
 	- *Script*: -  
 	- *Source Code*: filter.ClassifyLogBasedonMessageID.java  
 	- *Usage*: java filter.ClassifyLogBasedonMessageID [inputLogFile] [outputDir]  
@@ -165,7 +165,7 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 
 > The file names are the message IDs, and the extensions refer to original messages (.ori) or filtered messages (.fltr). 
 
-- **TemporalSpatialFilter**
+- <a id="3.1.1.3"/>**TemporalSpatialFilter**</a>
 	- *Script*: TemporalSpatialFilter.sh
 	- *Source Code*: filter.TemporalSpatialFilter.java
 	- *Usage*: java filter.TemporalSpatialFilter [-t/-s/-ts] [classifiedLogDir] [extension] [maintenance-time-file] [reservation-period-file] [outputDir]
@@ -212,9 +212,9 @@ The details can be found in our CCGrid17 paper.
 0001000A.ori   00040059.fltr  000400AA.fltr  000400F8.fltr  00040131.fltr  0004014D.fltr  0007021C.fltr  00080016.fltr  00090001.fltr  00090104.fltr  000A0003.fltr  no-Maint-filter-interval=1800s_43200s
 ``` 
 
-#### Analysis based on job scheduling log (Cobalt)
+#### <a id="3.1.2"/>Analysis based on job scheduling log (Cobalt)</a>
 
-- ** Extract all error messages (with non-exit code)**
+- <a id="3.1.2.1"/>**Extract all error messages (with non-exit code)**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.CollectErrorMessages.java
 	- *Usage*: java analysis.Job.CollectErrorMessages [schemaPath] [severity_index] [logDir] [log_extension]  
@@ -263,7 +263,7 @@ The snapshot of one job log file is shown below:
 
 > *Output*: the above command will generate totalFatalMsg.fat, which contains only error messages regarding jobs.
 
-- ** Calculate job failures based on users**
+- <a id="3.1.2.2"/>**Calculate job failures based on users**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.CalculateFailuresBasedonUsers.java
 	- *Usage*: java CalculateFailuresBasedonUsers [wlLengthFailureFile] [proj_exit_file_fs] [proj_exit_file_pe] [proj_outputFile] [user_exit_file_fs] [user_exit_file_pe] [user_outputFile]  

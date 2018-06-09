@@ -5,28 +5,36 @@ LogAider
 - [Dependencies](#2)
 - [How to use LogAider](#3)
 	- [*1. Parsing and Filtering*](#3.1)
-		- Regarding RAS log
-			- Extract all warn and fatal messages from original log
-			- Classify Log Based on MessageID
-		- Regarding job scheduling log (Cobalt)
-			- Extract all error messages (with non-exit code)
+		- [Analysis based on RAS log](#3.1.1)
+			- [Extract all warn and fatal messages from original log](#3.1.1.1)
+			- [Classify Log Based on MessageID](#3.1.1.2)
+		- [Analysis based on job scheduling log (Cobalt)](#3.1.2)
+			- [Extract all error messages (with non-exit code)](#3.1.2.1)
 	- [*2. Across-Field correlation*](#3.2)
-		- Regarding RAS Log
-			- Extract value types for each field
-			- Gererate state features
-			- Construct value-combination pool based on schema and featureStates
-			- Calculate the number of value combinations by brute-force method
-			- Calculate the number of value combinations by brute-force method
-			- Generate analysis for inputMsg.txt
-			- Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)
-		- Regarding the job scheduling log (Cobalt)
-			- Generate fullSchema directory
-			- Generate state features
-			- Generate state features
+		- [Analysis based on RAS Log](#3.2.1)
+			- [Extract value types for each field](#3.2.1.1)
+			- [Gererate state features](#3.2.1.2)
+			- [Construct value-combination pool based on schema and featureStates](#3.2.1.3)
+			- [Calculate the number of value combinations by brute-force method](#3.2.1.4)
+			- [Calculate the number of value combinations by brute-force method](#3.2.1.5)
+			- [Generate analysis for inputMsg.txt](#3.2.1.6)
+			- [Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)](#3.2.1.7)
+		- [Analysis based on job scheduling log (Cobalt)](#3.2.2)
+			- [Extract value types for each field](#3.2.2.1)
+			- [Generate state features](#3.2.2.2)
+			- [Generate state features](#3.2.2.3)
 	- [*3. Plot error distribution*](#3.3)
 	- [*4. Generate monthly and daily Log Analysis Results*](#3.4)
+		- [use 'separate' mode to get monthly results](#3.4.1)
+		- [Generate monthly data results for category and component](#3.4.2)
+		- [Compute Daily Count](#3.4.3)
 	- [*5. Analyze the error propagation (similarity-based filter)*](#3.5)
+		- [Analyze the error propagation (with the same type)](#3.5.1)
 	- [*6. Analyze Spatial-correlation*](#3.6)
+		- [ChiSquared Sygnificance Test](#3.6.1)
+		- [K means clustering analysis](#3.6.2)
+			- [Generate K-means Clustering results](#3.6.2.1)
+			- [Plot the K means clustering results](#3.6.2.2)
 			
 
 <a id="1"/>Description</a>
@@ -79,7 +87,7 @@ In the following, we use the RAS log of MIRA supercomputer (BlueG/Q system) as a
 
 This part discusses how to parse and filter the data
 
-#### Regarding RAS log
+#### <a id="3.1.1"/>Analysis based on RAS log</a>
 
 - **Extract all warn and fatal messages from original log**
 	- *Script*: CollectWarnFatalMessages.sh  
@@ -197,7 +205,7 @@ The details can be found in our CCGrid17 paper.
 0001000A.ori   00040059.fltr  000400AA.fltr  000400F8.fltr  00040131.fltr  0004014D.fltr  0007021C.fltr  00080016.fltr  00090001.fltr  00090104.fltr  000A0003.fltr  no-Maint-filter-interval=1800s_43200s
 ``` 
 
-#### Regarding job scheduling log (Cobalt)
+#### Analysis based on job scheduling log (Cobalt)
 
 - ** Extract all error messages (with non-exit code)**
 	- *Script*: -
@@ -258,11 +266,11 @@ The snapshot of one job log file is shown below:
 > * We omit the detailed description to the job-related analysis commands. 
 In addition to *CalculateFailuresBasedonUsers*, there are more analysis codes in the package analysis.Job. Please find the source codes there for details. 
 
-### 2. Across-Field correlation
+### <a id="3.2"/>2. Across-Field correlation</a>
 
-#### Regarding RAS Log
+#### <a id="3.2.1"/>Analysis based on RAS Log</a>
 
-- **Extract value types for each field**
+- <a id="3.2.1.1"/>**Extract value types for each field**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ExtractValueTypes4EachField
 	- *Usage*: java ExtractValueType4EachField [schema] [inputDir] [extension] [outputDir]
@@ -317,7 +325,7 @@ BQC 232
 Software_Error 239
 ```
 
-- **Gererate state features**
+- <a id="3.2.1.2"/>**Gererate state features**</a>
 	- *Script*: GenerateStateFeaturs.sh
 	- *Source Code*: analysis.RAS.GenerateStateFeatures
 	- *Usage*: java GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
@@ -326,7 +334,7 @@ Software_Error 239
 > This function is to generate the state features, in order to calculate the posterior probability based on observed evidences. By 'state', we mean the a specific target value of a field whose probability will be calculated. 
 For instance, the users may want to what is the probability of COMPONENT=CNK when MSG_ID=00010001 and CATEGORY=Software_error. In this example, COMPONENT=CNK is the target state, and MSG_ID=00010001 and CATEGORY=Software_error is called 'evidence'. The across-field correlation analysis can answer this question. 
 
-- **Construct value-combination pool based on schema and featureStates**  
+- <a id="3.2.1.3"/>**Construct value-combination pool based on schema and featureStates**</a>
 	- *Script*: BuildFieldValueCombination.sh
 	- *Source Code*: analysis.RAS.BuildFieldValueCombination
 	- *Usage*: java BuildFieldCombination [maxElementCount] [basicSchemaFile] [fullSchemaDir] [extension] [featureStateDir] [fsExt] [outputDir] [fieldNames....]
@@ -334,7 +342,7 @@ For instance, the users may want to what is the probability of COMPONENT=CNK whe
 
 >output: the directory fieldCombination that contains the value-combination probability pool.
 	
-- **Calculate the number of value combinations by brute-force method**
+- <a id="3.2.1.4"/>**Calculate the number of value combinations by brute-force method**</a>
 (valid for both RAS and Job log)
 
 	- *Script*: CalculateCountsForValueCombinations.sh
@@ -344,7 +352,7 @@ For instance, the users may want to what is the probability of COMPONENT=CNK whe
 	
 > output: Generate vc.count file in the dir fieldValueCombination.
 	
-- **Generate analysis for inputMsg.txt**	
+- <a id="3.2.1.5"/>**Generate analysis for inputMsg.txt**</a>
 	
 	- *Script*: ComputePostProbabilityBasedonMsg.sh
 	- *Source Code*: analysis.RAS.ComputePostProbabilityBasedonMsg
@@ -375,7 +383,7 @@ For instance, the users may want to what is the probability of COMPONENT=CNK whe
 ......
 ```
 
-- **Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)**	
+- <a id="3.2.1.6"/>**Generate spatial distribution (to be plotted in a graph by plot.PlotMiraGraph later on)**</a>
 	- *Script*: ComputeErrorDistribution.sh
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
 	- *Usage*: java ComputeErrorDistribution [[filterFieldIndex] [filterValue] ....] [logDir] [logExtension] [locationIndex] [separator] [outputDir] [merge/separate] [isAND (or OR)]
@@ -396,70 +404,72 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 > *[merge/seperate]* specifies the way of outputing the spatial analysis results. For instance, 'seperate' will store the results in four different files level0.err, level1.err, level2.err and level3.err, separately. Each file stores the statistical results with the corresponding level/layer (Rack, midplane, node board and compute card).  
 > *[isAND (or OR)]* specifies the operator to be applied on the multiple key-value pairs. For instance, int he example 1, it adopts 'true', meaning SEVERITY=FATAL **AND** CTLOCATION=END_JOB will be used to filter the messages.   
 
-#### Regarding the job scheduling log (Cobalt)
+#### <a id="3.2.2"/>Analysis based on job scheduling log (Cobalt)</a>
 	
-- **Generate fullSchema directory**	
+- <a id="3.2.2.1"/>**Extract value types for each field**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.ExtractValueTypes4EachField.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ExtractValueType4EachField [schema] [inputDir] [extension] [outputDir]
+	- *Example*: java ExtractValueType4EachField /home/fti/eventlog/schema/basicSchema.txt /home/fti/eventlog csv /home/fti/eventlog/schema/fullSchema
 	
-- **Generate state features**	
+> Similar to <a id=""/>analysis.RAS.ExtractValueTypes4EachField.java</a>
+	
+- <a id="3.2.2.2"/>**Generate state features**</a>
 	
 	- *Script*: -
 	- *Source Code*: analysis.Job.GenerateStateFeatures.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
+	- *Example*: java GenerateStateFeatures /home/fti/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/fti/Catalog-project/miralog/fullSchema/fullSchema/withRatio fsr /home/fti/Catalog-project/miralog/RAS-Job/Job csv /home/fti/Catalog-project/miralog/RAS-Job/Job/featureState capability exit_code major_project mode nodes_cost percentile prod_queue project_name queue science_field science_field_short size_buckets3 size_cost user
 	
-- **Generate vc.count file in the dir fieldValueCombination**	
+- <a id="3.2.2.3"/>**Calculate the number of value combinations by brute-force method**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.CalculateCountsForValueCombinations.java
 	- *Usage*: 
 	- *Example*: 
 	
-- **Generate analysis for inputMsg.txt**	
+- <a id="3.2.2.4"/>**Generate analysis for inputMsg.txt**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputePostProbabilityBasedonMsg.java
 	- *Usage*: 
 	- *Example*: 
 	
-- **Generate error distribution**  
-(This class is for generating/plotting the location distribution in the MIRA graph)
+- <a id="3.2.2.5"/>**Generate error distribution**</a>  
+(This class is used for generating/plotting the location distribution in the MIRA graph)
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
 	- *Usage*: 
 	- *Example*: 
 	
-### <a id="3.2"/>2. Analyzing failure rate of components</a>
+### <a id="3.3"/>2. Analyze failure rate of components</a>
 
-#### Regarding RAS Log
+#### <a id="3.3.1"/>Analysis based on RAS Log</a>
 
-- **Generate fatal-msg-count.txt, and monthly errors**	
+- <a id="3.3.1.1"/>**Generate fatal-msg-count.txt, and monthly errors**	
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
 	- *Usage*: 
 	- *Example*: 
 	
-- **Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)**	
+- <a id="3.3.1.2"/>**Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
 	- *Usage*: 
 	- *Example*: 		
 	
-- **Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)**	
+- <a id="3.3.1.3"/>**Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)**</a>	
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
 	- *Usage*: 
 	- *Example*: 
 		
-- **Generate fatal-locationKey-count.txt**	
+- <a id="3.3.1.4"/>**Generate fatal-locationKey-count.txt**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
 	- *Usage*: 
 	- *Example*: 
 	
-#### Regarding Job Log
-- **Generate lengthAnalysis directory**
+#### <a id="3.3.2"/>Analysis based on Job Log</a>
+- <a id="3.3.2.1"/>**Generate lengthAnalysis directory**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.SearchJobswithBreakWallClockFailure.java
 	- *Usage*: 
@@ -468,7 +478,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 ### <a id="3.3"/>3. Plot error distribution</a>
 (Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
 
-- **Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**
+- <a id="3.3.1"/>**Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**</a>
 	- *Script*: -
 	- *Source Code*: plot.PlotMiraGraph.java
 	- *Usage*: 
@@ -477,21 +487,21 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 > output: the gnuplot file that can be used to plot the graph using Gnuplot.  
 > example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg)
 
-### 4. <a id="3.4"/>Generate monthly and daily Log Analysis Results</a>
+### <a id="3.4"/>4. Generate monthly and daily Log Analysis Results</a>
 
-- **use 'separate' mode to get monthly results**
+- <a id="3.4.1"/>**use 'separate' mode to get monthly results**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
 	- *Usage*: 
 	- *Example*: 
 	
-- **Generate monthly data results for category and component**
+- <a id="3.4.2"/>**Generate monthly data results for category and component**</a>
 	- *Script*: -
 	- *Source Code*: filter.Summarize_MonthlyFailureRate.java
 	- *Usage*: 
 	- *Example*: 
 
-- **Compute Daily Count**
+- <a id="3.4.3"/>**Compute Daily Count**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeDailyFilteredCount.java
 	- *Usage*: 
@@ -500,7 +510,8 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 ### <a id="3.5"/>5. Analyze the error propagation (similarity-based filter)</a>
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
-- **Analyze the error propagation (with the same type): if a fatal event happens, it will probably happen again within x hours?**
+- <a id="3.5.1"/>**Analyze the error propagation (with the same type)**</a>
+(if a fatal event happens, it will probably happen again within x hours?)
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeTmporalErrPropagation.java
 	- *Usage*: 
@@ -508,7 +519,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 
 ### <a id="3.6"/>6. Analyze Spatial-correlation</a>
 
-- ** ChiSquared Sygnificance Test**
+#### <a id="3.6.1"/>**ChiSquared Sygnificance Test**</a>
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java
@@ -521,9 +532,10 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Example*: 
 	
 	
-- ** K means clustering analysis **
+#### <a id="3.6.2"/>**K means clustering analysis**</a>
 ( analysis.spatialcorr.kmeans.KMeansSolution (2 versions of outputs) and analysis.spatialcorr.kmeans.KMeansOpt (4 versions of outputs))
 
+- <a id="3.6.2.1"/>**Generate K-means Clustering results**</a>	
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
 	- *Usage*: 
@@ -534,7 +546,7 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Usage*: 
 	- *Example*: 
 
-> Plot the K means clustering results:  
+- <a id="3.6.2.2"/>**Plot the K means clustering results**</a>  
 > input (kmeans clustering matrix - output of KMeansSolution or KMeansOpt); output (gnuplot file)
 	- *Script*: -
 	- *Source Code*: plot.PlotKMeansMidplanes

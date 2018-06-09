@@ -328,8 +328,8 @@ Software_Error 239
 - <a id="3.2.1.2"/>**Gererate state features**</a>
 	- *Script*: GenerateStateFeaturs.sh
 	- *Source Code*: analysis.RAS.GenerateStateFeatures
-	- *Usage*: java GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
-	- *Example*: java GenerateStateFeatures /home/sdi/Catalog-project/miralog/schema/basicSchema.txt /home/sdi/Catalog-project/miralog/schema/fullSchema/withCount fsc /home/sdi/Catalog-project/miralog csv /home/sdi/Catalog-project/miralog/featureState CATEGORY COMPONENT CPU CTLACTION LOCATION MSG_ID SEVERITY
+	- *Usage*: java analysis.RAS.GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
+	- *Example*: java analysis.RAS.GenerateStateFeatures /home/sdi/Catalog-project/miralog/schema/basicSchema.txt /home/sdi/Catalog-project/miralog/schema/fullSchema/withCount fsc /home/sdi/Catalog-project/miralog csv /home/sdi/Catalog-project/miralog/featureState CATEGORY COMPONENT CPU CTLACTION LOCATION MSG_ID SEVERITY
 
 > This function is to generate the state features, in order to calculate the posterior probability based on observed evidences. By 'state', we mean the a specific target value of a field whose probability will be calculated. 
 For instance, the users may want to what is the probability of COMPONENT=CNK when MSG_ID=00010001 and CATEGORY=Software_error. In this example, COMPONENT=CNK is the target state, and MSG_ID=00010001 and CATEGORY=Software_error is called 'evidence'. The across-field correlation analysis can answer this question. 
@@ -355,7 +355,7 @@ For instance, the users may want to what is the probability of COMPONENT=CNK whe
 - <a id="3.2.1.5"/>**Generate analysis for inputMsg.txt**</a>
 	
 	- *Script*: ComputePostProbabilityBasedonMsg.sh
-	- *Source Code*: analysis.RAS.ComputePostProbabilityBasedonMsg
+	- *Source Code*: analysis.RAS.ComputePostProbabilityBasedonMsg.java
 	- *Usage*: java ComputePostProbabilityBasedonMsg [fieldListFile] [vcCountHashMapFile] [inputMessageFile] [outputResultFile] [confidenceLevel]
 	- *Example*: java ComputePostProbabilityBasedonMsg /home/sdi/Catalog-project/miralog/fieldValueCombination/fieldList.txt /home/sdi/Catalog-project/miralog/fieldValueCombination/vc.count "/home/sdi/Catalog-project/miralog/inputMsg.txt" /home/sdi/Catalog-project/miralog/analyzeMsg 0.95
 	
@@ -410,35 +410,44 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	- *Script*: -
 	- *Source Code*: analysis.Job.ExtractValueTypes4EachField.java
 	- *Usage*: java ExtractValueType4EachField [schema] [inputDir] [extension] [outputDir]
-	- *Example*: java ExtractValueType4EachField /home/fti/eventlog/schema/basicSchema.txt /home/fti/eventlog csv /home/fti/eventlog/schema/fullSchema
+	- *Example*: java ExtractValueType4EachField /home/sdi/eventlog/schema/basicSchema.txt /home/sdi/eventlog csv /home/sdi/eventlog/schema/fullSchema
 	
-> Similar to <a id=""/>analysis.RAS.ExtractValueTypes4EachField.java</a>
+> Similar to [analysis.RAS.ExtractValueTypes4EachField.java](#3.2.1.1)
 	
 - <a id="3.2.2.2"/>**Generate state features**</a>
 	
 	- *Script*: -
 	- *Source Code*: analysis.Job.GenerateStateFeatures.java
 	- *Usage*: java GenerateStateFeatures [basicSchema] [fullSchemaDir] [schemaExt] [logDir] [logExt] [outputDir] [fields....]
-	- *Example*: java GenerateStateFeatures /home/fti/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/fti/Catalog-project/miralog/fullSchema/fullSchema/withRatio fsr /home/fti/Catalog-project/miralog/RAS-Job/Job csv /home/fti/Catalog-project/miralog/RAS-Job/Job/featureState capability exit_code major_project mode nodes_cost percentile prod_queue project_name queue science_field science_field_short size_buckets3 size_cost user
+	- *Example*: java GenerateStateFeatures /home/sdi/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/sdi/Catalog-project/miralog/fullSchema/fullSchema/withRatio fsr /home/sdi/Catalog-project/miralog/RAS-Job/Job csv /home/sdi/Catalog-project/miralog/RAS-Job/Job/featureState capability exit_code major_project mode nodes_cost percentile prod_queue project_name queue science_field science_field_short size_buckets3 size_cost user
+	
+> Similar to [analysis.RAS.GenerateStateFeatures.java](#3.2.1.2)
 	
 - <a id="3.2.2.3"/>**Calculate the number of value combinations by brute-force method**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.CalculateCountsForValueCombinations.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java CalculateCountsForValueCombinations [basicSchemaFile] [fullSchemaDir] [fullSchemaExt] [logDir] [extension] [outputFile] [fields....]
+	- *Example*: java CalculateCountsForValueCombinations /home/sdi/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/sdi/Catalog-project/miralog/fullSchema/fullSchema/withRatio fsr /home/sdi/Catalog-project/miralog/RAS-Job/Job csv /home/sdi/Catalog-project/miralog/fieldValueCombination capability exit_code major_project mode nodes_cost percentile prod_queue project_name queue science_field science_field_short size_buckets3 size_cost user 
+	
+> Similar to [analysis.RAS.CalculateCountsForValueCombinations.java](#3.2.1.3)
 	
 - <a id="3.2.2.4"/>**Generate analysis for inputMsg.txt**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputePostProbabilityBasedonMsg.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ComputePostProbabilityBasedonMsg [fieldListFile] [vcCountHashMapFile] [inputMessageFile] [outputResultFile] [confidenceLevel]
+	- *Example*: java ComputePostProbabilityBasedonMsg /home/sdi/Catalog-project/miralog/RAS-Job/Job/fieldValueCombination/fieldList.txt /home/sdi/Catalog-project/miralog/RAS-Job/Job/fieldValueCombination/vc.count "/home/sdi/Catalog-project/miralog/RAS-Job/Job/inputMsg.txt" /home/sdi/Catalog-project/miralog/RAS-Job/Job/analyzeMsg 0.95
+	
+> Similar to [analysis.RAS.ComputePostProbabilityBasedonMsg.java](#3.2.1.5)
 	
 - <a id="3.2.2.5"/>**Generate error distribution**</a>  
 (This class is used for generating/plotting the location distribution in the MIRA graph)
 	- *Script*: -
 	- *Source Code*: analysis.Job.ComputeJobMessageCounts.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ComputeJobMessageCounts [onlyCheckErr?] [jobLog] [exitCodeIndex] [locationCodeIndexx] [outputDir]
+	- *Example 1*: java ComputeJobMessageCounts true/false /home/sdi/Catalog-project/miralog/RAS-Job/Job/scrubbed-201410-data.csv 14 23 /home/sdi/Catalog-project/miralog/RAS-Job/Job/locDistribution/err
+	- *Example 2*: java ComputeJobMessageCounts false /home/sdi/Catalog-project/miralog/Adam-job-log/ascovel_jobhistory.csv 24 3 /home/sdi/Catalog-project/miralog/Adam-job-log/all
+	
+> Similar to [analysis.RAS.ComputeErrorDistribution.java](#3.2.1.6)
 	
 ### <a id="3.3"/>2. Analyze failure rate of components</a>
 

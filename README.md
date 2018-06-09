@@ -168,14 +168,15 @@ ANL-ALCF-RE-MIRA_20130409_20131231.csv  ANL-ALCF-RE-MIRA_20140101_20141231.csv  
 - **TemporalSpatialFilter**
 	- *Script*: TemporalSpatialFilter.sh
 	- *Source Code*: filter.TemporalSpatialFilter.java
-	- *Usage*: java filter.TemporalSpatialFilter [-t/-s/-ts] [classifiedLogDir] [extension] [maintenance-time-file] [outputDir]
-	- *Example 1*: java TemporalSpatialFilter -t /home/sdi/Catalog-project/miralog/FilterAndClassify ori /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/sdi/Catalog-project/miralog/FilterAndClassify  
-	- *Example 2*: java TemporalSpatialFilter -ts /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify ori /home/sdi/Work/Catalog-project/Catalog-data/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt /home/sdi/Work/Catalog-project/Catalog-data/Compare-5years-1years/5years/FilterAndClassify  
+	- *Usage*: java filter.TemporalSpatialFilter [-t/-s/-ts] [classifiedLogDir] [extension] [maintenance-time-file] [reservation-period-file] [outputDir]
+	- *Example 1*: java TemporalSpatialFilter -t /home/sdi/Catalog-project/miralog/FilterAndClassify ori /home/sdi/Work/Catalog-project/Catalog-data/schema/maintainance-period.txt /home/sdi/Work/Catalog-project/Catalog-data/schema/total-reservation.txt /home/sdi/Catalog-project/miralog/FilterAndClassify  
+	- *Example 2*: java TemporalSpatialFilter -ts /home/sdi/Work/Catalog-project/Catalog-data/FilterAndClassify ori /home/sdi/Work/Catalog-project/Catalog-data/schema/maintainance-period.txt /home/sdi/Work/Catalog-project/Catalog-data/schema/total-reservation.txt /home/sdi/Work/Catalog-project/Catalog-data/FilterAndClassify  
 
 > *-t/-s/-ts* indicates only-temporal filter, only spatial-filter or temporal-spatial filter.  
 *classifiedLogDir* is the output dir pointed out by filter.ClassifyLogBasedonMessageID.  
 *extension* is the extension of the classified files in the *classified dir*  
 *maintenance-time-file* is the file containig the maintainance periods  
+*reservation-perid-file* contains all the reservation periods, each corresponding only to one user/job. That is, all the failures happening in the same researvation period sould be counted as one failure event, according to the MIRA system administrator. The MIRA's 5-year reservation file is total-reservation.txt, which can be found in the schema/ of the package.  
 *outputDir* is the output directory that will cotnaint the filtered log data results. 
 
 > The content of maintenance-time-file is shown below: 

@@ -1,0 +1,44 @@
+#layout schema
+
+#For each layout, level must be put in the first place, followed by other attributes of the layout. All the abbistributes followed by the "level" will be put in one layout until another level appears.
+#mira_cluster:i/o rack
+level=0
+fullName=Mira System (IO nodes)
+customize=true
+count=6
+row=3
+column=2
+titleRepresentBase=-
+
+#rack:I/O drawer
+level=1
+fullName=Rack
+nickName=Q
+customize=false
+count=9
+rowMajor=true
+#titleRepresentType could be binary, oct, hex, or decimal
+titleRowBase=decimal
+titleColumnBase=binary
+#offset: 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,.... (starts from 0)
+titleRepresentOffset=16
+
+#I/O drawer:Computer Card
+level=2
+fullName=IO drawer
+nickName=I
+customize=true
+count=8
+row=2
+column=4
+#rowMajor=true
+titleRepresentBase=decimal
+
+#Computer Card:core
+level=3
+fullName=Computer Card
+nickName=J
+#customize=false
+#count=8
+#rowMajor=true
+titleRepresentBase=hex

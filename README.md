@@ -25,12 +25,10 @@ LogAider
 			- [Generate state features](#3.2.2.3)
 	- [**3. Analyze failure rate of components**](#3.3)
 		- [Analysis based on RAS Log](#3.3.1)
-			- [Generate fatal-msg-count.txt and monthly errors](#3.3.1.1)
-			- [Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)](#3.3.1.2)
-			- [Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)](#3.3.1.3)
-			- [Generate fatal-locationKey-count.txt*](#3.3.1.4)
+			- [Compute the number of events for each messageID, based on the files xxxxxxxx.fltr](#3.3.1.1)
+			- [Compute the distribution of fine-grained components based on messages and location fields (such as Rxx-Ixx-Jxx-Uxx)*](#3.3.1.2)
 		- [Analysis based on Job Log](#3.3.2)
-			- [Generate lengthAnalysis directory by searching jobs with break-wallclock-failures](#3.3.2.1)
+			- [Search for jobs with break-wallclock-failures](#3.3.2.1)
 	- [**4. Plot error distribution**](#3.4)
 	- [**5. Generate monthly and daily Log Analysis Results**](#3.5)
 		- [use 'separate' mode to get monthly results](#3.5.1)
@@ -457,97 +455,200 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 	
 > Similar to [analysis.RAS.ComputeErrorDistribution.java](#3.2.1.6)
 	
-### <a id="3.3"/>2. Analyze failure rate of components</a>
+### <a id="3.3"/>3. Analyze failure rate of components</a>
+
+> This part focuses on the analysis of failure rate for specific metrics. Note that the analysis in this subsection should always be conducted based on certain-filtered logs. 
+For instance, the input is supposed to be 'FilterAndClassify' directory.
 
 #### <a id="3.3.1"/>Analysis based on RAS Log</a>
 
-- <a id="3.3.1.1"/>**Generate fatal-msg-count.txt and monthly errors**	
+- <a id="3.3.1.1"/>**Compute the number of events for each messageID, based on the files xxxxxxxx.fltr**	
 	- *Script*: -
 	- *Source Code*: filter.Summarize1.java
-	- *Usage*: 
-	- *Example*: 
-	
-- <a id="3.3.1.2"/>**Generate fatal-msg-count.txt.cat (Compute the distribution of categories based on messages)**</a>
-	- *Script*: -
-	- *Source Code*: filter.Summarize2.java
-	- *Usage*: 
-	- *Example*: 		
-	
-- <a id="3.3.1.3"/>**Generate fatal-msg-count.txt.cmp (Compute the distribution of components based on messages)**</a>	
-	- *Script*: -
-	- *Source Code*: filter.Summarize3.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java filter.Summarize1 [inputDir] [extension] [outputDir]
+	- *Example*: java Summarize1 /home/sdi/Catalog-project/miralog/RAS-Job/RAS/FilterAndClassify fltr /home/sdi/Catalog-project/miralog/RAS-Job/RAS/FilterAndClassify/summarize/days 
 		
-- <a id="3.3.1.4"/>**Generate fatal-locationKey-count.txt**</a>
+> output: Generate fatal-msg-count.txt and monthly errors.
+
+- <a id="3.3.1.2"/>**Compute the distribution of fine-grained components based on messages and location fields (such as Rxx-Ixx-Jxx-Uxx)**</a>
 	- *Script*: -
 	- *Source Code*: filter.Summarize4.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java filter.Summarize4 [classifyFilterDir] [extension] [outputFile]
+	- *Example*: java Summarize4 /home/sdi/Catalog-project/miralog/RAS-Job/RAS/FilterAndClassify fltr /home/sdi/Catalog-project/miralog/RAS-Job/RAS/FilterAndClassify/summarize
+
+> output: Generate fatal-locationKey-count.txt	
 	
 #### <a id="3.3.2"/>Analysis based on Job Log</a>
 
-- <a id="3.3.2.1"/>**Generate lengthAnalysis directory by searching jobs with break-wallclock-failures**</a>
+- <a id="3.3.2.1"/>**Search for jobs with break-wallclock-failures**</a>
 	- *Script*: -
 	- *Source Code*: analysis.Job.SearchJobswithBreakWallClockFailure.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java SearchJobswithBreakWallClockFailure [jobLogFile] [basicSchema] [outputDir]
+	- *Example*: java SearchJobswithBreakWallClockFailure /home/sdi/Catalog-project/miralog/RAS-Job/Job/scrubbed-201410-data.csv /home/sdi/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/sdi/Catalog-project/miralog/RAS-Job/Job/lengthAnalysis
+
+> output: Generate lengthAnalysis directory.
 								
-### <a id="3.4"/>3. Plot error distribution</a>
-(Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution or analysis.Job.ComputeJobMessageCounts, before doing this step)
+### <a id="3.4"/>4. Plot error distribution</a>
+(Preliminary: You need to finish step analysis.RAS.ComputeErrorDistribution, analysis.Job.ComputeJobMessageCounts, or , before doing this step)
 
 - <a id="3.4.1"/>**Generate the gnuplot plot script in order to plot the machines in a image for the purpose of spatial-correlation study**</a>
 	- *Script*: -
 	- *Source Code*: plot.PlotMiraGraph.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java PlotMiraGraph [gnuplotTemplateFile] [distributionDir] [extension] [layoutSchemaFile] [maxLevel] [outputFileName]
+	- *Example 1*: java PlotMiraGraph /home/sdi/Catalog-project/miralog/gnuplot/temp-layout.p /home/sdi/Catalog-project/miralog/errLocDistribution/fatal err /home/sdi/Catalog-project/miralog/gnuplot/computeRackLayoutSchema.txt 2 /home/sdi/Catalog-project/miralog/gnuplot/errdis_fatal_compute.p
+	- *Example 2*: java PlotMiraGraph /home/sdi/Catalog-project/miralog/gnuplot/temp-layout.p /home/sdi/Catalog-project/miralog/errLocDistribution/fatal err /home/sdi/Catalog-project/miralog/gnuplot/ioRackLayoutSchema.txt 2 /home/sdi/Catalog-project/miralog/gnuplot/errDis_fatal_io.p
+	- *Example 3*: java PlotMiraGraph /home/sdi/Catalog-project/miralog/gnuplot/temp-layout.p /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 err /home/sdi/Catalog-project/miralog/gnuplot/computeRackLayoutSchema.txt 2 /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001/gnuplot/errdis_fatal_compute.p
+	- *Example 4*: java PlotMiraGraph /home/sdi/Catalog-project/miralog/gnuplot/temp-layout.p /home/sdi/Catalog-project/miralog/Adam-job-log/err err /home/sdi/Catalog-project/miralog/gnuplot/computeRackLayoutSchema.txt 2 /home/sdi/Catalog-project/miralog/Adam-job-log/err/dis_compute.p
 	
 > output: the gnuplot file that can be used to plot the graph using Gnuplot.  
 > example output: ![dis_compute.jpg](example-output/errLocDistribution/dis_compute.jpg)
 
-### <a id="3.5"/>4. Generate monthly and daily Log Analysis Results</a>
+> *[gnuplotTemplateFile]* specifies the template file of gnuplot script. There are two candidate files in example-input/ and we suggest to use temp-layout-jpeg.p becase the other one temp-layout.p will generate .eps file, taking a long time and large space to store.  
+> *[distributionDir]* specifies the error distribution data, which is generated using error distribution analysis code such as [analysis.RAS.ComputeErrorDistribution.java](#3.2.1.6).  
+> *[extension]* indicates the extension of data files. In the above examples, the extension is always 'err', pointing to the level1.err, level2.err....  
+> *[layoutSchemaFile]* specifies the architecture of the system. In MIRA, the architecture is RACK - Midplane - Nodeboard - Cardboard, with respect to the compute machines.  
+> *[maxLevel]* specifies the max level to plot (e.g., maxLevel=2 means that only plotting the errors/failures regarding rack and midplane.  
+> *[outputFileName]* specifies the output file name.
+
+> The users can modify the 'layout schema' file to enable the PlotMiraGraph.java to suit other supercomputer logs with different architectures. 
+The following shows the content of layout schema file for compute racks (computeRackLayoutSchema.txt)
+```
+#layout schema
+
+#For each layout, level must be put in the first place, followed by other attributes of the layout. All the abbistributes followed by the "level" will be put in one layout until another level appears.
+#mira_cluster:rack
+level=0
+fullName=Mira System (Compute Nodes)
+customize=true
+count=48
+row=3
+column=16
+titleRepresentBase=-
+
+#rack:midplane
+level=1
+fullName=Rack
+nickName=R
+customize=false
+count=2
+rowMajor=true
+#titleRepresentType could be binary, oct, hex, decimal, or decimal2 (decimal with 2-digits representation)
+titleRepresentBase=hex
+
+#midplane:nodeboard
+level=2
+fullName=Midplane
+nickName=M
+customize=false
+count=16
+rowMajor=true
+titleRepresentBase=binary
+
+#node:card_board
+level=3
+fullName=Node
+nickName=N
+#customize=false
+#count=32
+#rowMajor=true
+titleRepresentBase=decimal2
+```
+
+The following shows the content of layout schema file for I/O racks (ioRackLayoutSchema.txt)
+```
+#layout schema
+
+#For each layout, level must be put in the first place, followed by other attributes of the layout. All the abbistributes followed by the "level" will be put in one layout until another level appears.
+#mira_cluster:i/o rack
+level=0
+fullName=Mira System (IO nodes)
+customize=true
+count=6
+row=3
+column=2
+titleRepresentBase=-
+
+#rack:I/O drawer
+level=1
+fullName=Rack
+nickName=Q
+customize=false
+count=9
+rowMajor=true
+#titleRepresentType could be binary, oct, hex, or decimal
+titleRowBase=decimal
+titleColumnBase=binary
+#offset: 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,.... (starts from 0)
+titleRepresentOffset=16
+
+#I/O drawer:Computer Card
+level=2
+fullName=IO drawer
+nickName=I
+customize=true
+count=8
+row=2
+column=4
+#rowMajor=true
+titleRepresentBase=decimal
+
+#Computer Card:core
+level=3
+fullName=Computer Card
+nickName=J
+#customize=false
+#count=8
+#rowMajor=true
+titleRepresentBase=hex
+```
+
+### <a id="3.5"/>5. Generate monthly and daily Log Analysis Results</a>
 
 - <a id="3.5.1"/>**use 'separate' mode to get monthly results**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeErrorDistribution.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: -
+	- *Example*: -
+	
+> See  [analysis.RAS.ComputeErrorDistribution.java](#3.2.1.6)
 	
 - <a id="3.5.2"/>**Generate monthly data results for category and component**</a>
 	- *Script*: -
 	- *Source Code*: filter.Summarize_MonthlyFailureRate.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java Summarize_MonthlyFailureRate [fullSchemaDir] [monthlyFailureRateDir_BaseOnMsgID] [extension]
+	- *Example*: java Summarize_MonthlyFailureRate /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/withRatio /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/ts/fatalEventMonthDis mct
 
 - <a id="3.5.3"/>**Compute Daily Count**</a>
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeDailyFilteredCount.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: ComputeDailyFilteredCount [filterLogDir] [extension]
+	- *Example*: java ComputeDailyFilteredCount /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/no-Maint-no-DIAGS-filter-interval=240s/ts fltr
 
-### <a id="3.6"/>5. Analyze the error propagation (similarity-based filter)</a>
+### <a id="3.6"/>6. Analyze the error propagation (similarity-based filter)</a>
 (This analysis can also be considered a more advanced filtering algorithm, which takes into account the similarity across the filtered messages).
 
 - <a id="3.6.1"/>**Analyze the error propagation (with the same type)**</a>
 (if a fatal event happens, it will probably happen again within x hours?)
 	- *Script*: -
 	- *Source Code*: analysis.RAS.ComputeTmporalErrPropagation.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ComputeTmporalErrPropagation [rootDir] [extension] [minutes]
+	- *Example*: java ComputeTmporalErrPropagation /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/no-MaintResv-no-DIAGS-filter-interval=240s/ts fltr 60
 
-### <a id="3.7"/>6. Analyze Spatial-correlation</a>
+### <a id="3.7"/>7. Analyze Spatial-correlation</a>
 
 #### <a id="3.7.1"/>**ChiSquared Sygnificance Test**</a>
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: -
+	- *Example*: -
+	
+> This is hard-coded. Please see our CCGrid paper and source code to understand how to use it.	 
 	
 	- *Script*: -
 	- *Source Code*: analysis.significance.ChiSquareSingleTest.java
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java ChiSquaredTest [contingency_table_path]
+	- *Example*: java ChiSquaredTest /home/sdi/Catalog-project/miralog/RAS-Job/Job/featureState/science_field_short/science_field_short-mode.fs 
 	
 	
 #### <a id="3.7.2"/>**K means clustering analysis**</a>
@@ -556,18 +657,18 @@ e.g., the location information R02-M1-N14 is the 8th field in the following mess
 - <a id="3.7.2.1"/>**Generate K-means Clustering results**</a>	
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java KMeansSolution [allowDuplicate?] [inputFilePath]
+	- *Example*: -
 
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.kmeans.KMeansOpt
-	- *Usage*: 
-	- *Example*: 
+	- *Usage*: java KMeansOpt [kmeansSolType (fixK or optK)] [initNumOfSets] [allowDuplicate?] [inputFilePath]
+	- *Example*: java KMeansOpt fixK 10 true /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/00090210.ori 
 
 - <a id="3.7.2.2"/>**Plot the K means clustering results**</a>  
 > input (kmeans clustering matrix - output of KMeansSolution or KMeansOpt); output (gnuplot file)
 	- *Script*: -
-	- *Source Code*: plot.PlotKMeansMidplanes
-	- *Usage*: 
-	- *Example*: 	
+	- *Source Code*: plot.PlotKMeansMidplanes.java
+	- *Usage*: java PlotMeansMidplanes [gnuplotTemplateFile] [inputFilePath]
+	- *Example*: java PlotMeansMidplanes /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/gnuplot/template.p /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/00090210.ori.fxtrue	
 	

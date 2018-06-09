@@ -1,0 +1,39 @@
+#layout schema
+
+#For each layout, level must be put in the first place, followed by other attributes of the layout. All the abbistributes followed by the "level" will be put in one layout until another level appears.
+#mira_cluster:rack
+level=0
+fullName=Mira System (Compute Nodes)
+customize=true
+count=48
+row=3
+column=16
+titleRepresentBase=-
+
+#rack:midplane
+level=1
+fullName=Rack
+nickName=R
+customize=false
+count=2
+rowMajor=true
+#titleRepresentType could be binary, oct, hex, decimal, or decimal2 (decimal with 2-digits representation)
+titleRepresentBase=hex
+
+#midplane:nodeboard
+level=2
+fullName=Midplane
+nickName=M
+customize=false
+count=16
+rowMajor=true
+titleRepresentBase=binary
+
+#node:card_board
+level=3
+fullName=Node
+nickName=N
+#customize=false
+#count=32
+#rowMajor=true
+titleRepresentBase=decimal2

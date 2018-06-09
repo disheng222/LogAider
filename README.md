@@ -638,6 +638,8 @@ titleRepresentBase=hex
 
 #### <a id="3.7.1"/>**ChiSquared Sygnificance Test**</a>
 (first execute analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java, then execute analysis.significance.ChiSquareSingleTest)
+
+- Generate Contingency Table For Significance Analysis
 	- *Script*: -
 	- *Source Code*: analysis.spatialcorr.GenerateContingencyTableForSigAnalysis.java
 	- *Usage*: -
@@ -645,6 +647,7 @@ titleRepresentBase=hex
 	
 > This is hard-coded. Please see our CCGrid paper and source code to understand how to use it.	 
 	
+- Performance ChiSquare Single Test	
 	- *Script*: -
 	- *Source Code*: analysis.significance.ChiSquareSingleTest.java
 	- *Usage*: java ChiSquaredTest [contingency_table_path]
@@ -656,22 +659,23 @@ titleRepresentBase=hex
 
 - <a id="3.7.2.1"/>**Generate K-means Clustering results**</a>	
 
-> The traditional solution: K means solution
-	- *Script*: -
-	- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
-	- *Usage*: java KMeansSolution [allowDuplicate?] [inputFilePath]
-	- *Example*: -
+	1. The traditional solution: K means solution  
+		- *Script*: -
+		- *Source Code*: analysis.spatialcorr.kmeans.KMeansSolution
+		- *Usage*: java KMeansSolution [allowDuplicate?] [inputFilePath]
+		- *Example*: -
 
-> The optimized solution (with optimized number of clusters)
-	- *Script*: -
-	- *Source Code*: analysis.spatialcorr.kmeans.KMeansOpt
-	- *Usage*: java KMeansOpt [kmeansSolType (fixK or optK)] [initNumOfSets] [allowDuplicate?] [inputFilePath]
-	- *Example*: java KMeansOpt fixK 10 true /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/00090210.ori 
+	2. The optimized solution (with optimized number of clusters)  
+		- *Script*: -
+		- *Source Code*: analysis.spatialcorr.kmeans.KMeansOpt
+		- *Usage*: java KMeansOpt [kmeansSolType (fixK or optK)] [initNumOfSets] [allowDuplicate?] [inputFilePath]
+		- *Example*: java KMeansOpt fixK 10 true /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/00090210.ori 
 
 - <a id="3.7.2.2"/>**Plot the K means clustering results**</a>  
-> input (kmeans clustering matrix - output of KMeansSolution or KMeansOpt); output (gnuplot file)
 	- *Script*: -
 	- *Source Code*: plot.PlotKMeansMidplanes.java
 	- *Usage*: java PlotMeansMidplanes [gnuplotTemplateFile] [inputFilePath]
 	- *Example*: java PlotMeansMidplanes /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/gnuplot/template.p /home/sdi/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/FilterAndClassify/00090210.ori.fxtrue	
 	
+> input (kmeans clustering matrix  
+> output of KMeansSolution or KMeansOpt); output (gnuplot file)

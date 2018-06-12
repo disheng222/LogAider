@@ -650,7 +650,7 @@ titleRepresentBase=hex
 > *[diffIDDelayThreshold(sec)]* specifies the delay threshold for the messages with different message IDs.  
 > *[parameter seting file]* specifies the weights of the different attributes. Please see our CCGrid17 paper for understanding the weights in details.
 
-> output: We have put the example output files in the sub-fold: similarity-based-filter. Please read the README.txt in that folder to understand the results.
+> output: We have put the example output files in the sub-directory: similarity-based-filter. Please read the [README.txt](example-output/similarity-based-filter/README.txt) in that folder to understand the results.
 
 ### <a id="3.7"/>7. Analyze Spatial-correlation</a>
 

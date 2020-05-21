@@ -16,15 +16,18 @@ public class RASRecord implements Comparable<RASRecord>{
 	private String component;
 	private String category;
 	private String record;
+	private int taskID = 0;
+	private int taskIDCount = 0;
 	
 	public RASRecord(double time, String recordID,
-			String msgID, String component, String category, String blockCode, String record) {
+			String msgID, String component, String category, String blockCode, int taskID, String record) {
 		this.time = time;
 		this.recordID = recordID;
 		this.blockCode = blockCode;
 		this.msgID = msgID;
 		this.component = component;
 		this.category = category;
+		this.taskID = taskID;
 		this.record = record;
 	}
 	public RASRecord(double time, String recordID, String blockCode, String msgID, String record) {
@@ -78,6 +81,20 @@ public class RASRecord implements Comparable<RASRecord>{
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
+	public int getTaskIDCount() {
+		return taskIDCount;
+	}
+	public void setTaskIDCount(int taskIDCount) {
+		this.taskIDCount = taskIDCount;
+	}
+	
+	public int getTaskID() {
+		return taskID;
+	}
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
+	}
 	public int compareTo(RASRecord other)
 	{
 		if(time < other.time)
@@ -87,6 +104,7 @@ public class RASRecord implements Comparable<RASRecord>{
 		else
 			return 0;
 	}
+	
 	public String toString()
 	{
 		return record;

@@ -26,6 +26,8 @@ public class ComputeLocationBasedOnMIRCode {
 		int nodeCount = Integer.parseInt(s[s.length-1]);
 		
 		String firstMidPlaneCode = s[1];
+		if(firstMidPlaneCode.startsWith("R"))
+			firstMidPlaneCode = convertNodeLocToMidPlaneBlockCode(firstMidPlaneCode);
 		MidPlaneLocationElement mp = computeMidplaneLocation(firstMidPlaneCode);
 		
 		List<MidPlaneLocationElement> eList = new ArrayList<MidPlaneLocationElement>();
@@ -33,6 +35,7 @@ public class ComputeLocationBasedOnMIRCode {
 		eList.add(mp);
 		
 		char[] cc = firstMidPlaneCode.toCharArray();
+		//System.out.println("code="+code+":::"+firstMidPlaneCode);
 		int x1 = Integer.parseInt(String.valueOf(cc[0]));
 		int y1 = Integer.parseInt(String.valueOf(cc[1]), 16);
 		int x1_mod = x1%4;
@@ -61,7 +64,11 @@ public class ComputeLocationBasedOnMIRCode {
 		
 		String secondMidPlaneCode = s[2];
 
+		if(secondMidPlaneCode.startsWith("R"))
+			secondMidPlaneCode = convertNodeLocToMidPlaneBlockCode(secondMidPlaneCode);		
 		cc = secondMidPlaneCode.toCharArray();
+
+		
 		int x2 = Integer.parseInt(String.valueOf(cc[0]));
 		int y2= Integer.parseInt(String.valueOf(cc[1]), 16);
 		int x2_mod = x2%4;
@@ -122,15 +129,33 @@ public class ComputeLocationBasedOnMIRCode {
 	
 	public static MidPlaneLocationElement computeMidplaneLocation(String code)
 	{
-		char[] cc = code.toCharArray();
-		int x = Integer.parseInt(String.valueOf(cc[0]));
-		int y = Integer.parseInt(String.valueOf(cc[1]), 16);
-		int z = Integer.parseInt(String.valueOf(cc[2]), 16);
-		int w = Integer.parseInt(String.valueOf(cc[3]), 16);
+		String nodeBlock = code;
+		if(code.startsWith("R"))
+		{
+			nodeBlock = convertNodeLocToMidPlaneBlockCode(code);  //return xxxxx-xxxxx
+			nodeBlock = nodeBlock.split("-")[0];
+		}
+		char[] cc = nodeBlock.toCharArray();
+		int x;
+		int y;
+		int z;
+		int w;
+		try {
+			x = Integer.parseInt(String.valueOf(cc[0]));
+			y = Integer.parseInt(String.valueOf(cc[1]), 16);
+			z = Integer.parseInt(String.valueOf(cc[2]), 16);
+			w = Integer.parseInt(String.valueOf(cc[3]), 16);
+			
+			//System.out.println("code="+code+",nodeBlock="+nodeBlock+" : x="+x+",y="+y);
+			MidPlaneLocationElement ee = computeMidplaneLocation(nodeBlock, x, y, z, w);
+			return ee;			
+		} catch (Exception e) { //code is like: MIR-R23M0-R22M0-1024
+			//System.out.println("code="+code+",nodeBlock="+nodeBlock);
+			e.printStackTrace();
+		}
 		
-		MidPlaneLocationElement e = computeMidplaneLocation(code, x, y, z, w);
-
-		return e;
+		return null;
+		
 	}
 	
 	public static MidPlaneLocationElement computeMidplaneLocation(String code, int x, int y, int z, int w)
@@ -246,8 +271,14 @@ public class ComputeLocationBasedOnMIRCode {
 	
 	public static String convertNodeLocToMidPlaneBlockCode(String nodeLocation)
 	{
+		String nodeLocation_ = nodeLocation;
+		if(!nodeLocation.contains("-"))
+		{
+			char[] ss = nodeLocation.toCharArray();
+			nodeLocation_ = "R"+ss[1]+ss[2]+"-"+ss[3]+ss[4];
+		}
 		StringBuilder sb1 = new StringBuilder(), sb2 = new StringBuilder();
-		String[] s = nodeLocation.split("-");
+		String[] s = nodeLocation_.split("-");
 		String locR_16 = s[0].replace("R", "");
 		int locR = Integer.parseInt(locR_16, 16);
 		if(locR>=0&&locR<=7)
@@ -410,5 +441,8 @@ public class ComputeLocationBasedOnMIRCode {
 		
 		int overlap = checkIOBlockOverlapBlock(ioCode, blockCode);
 		System.out.println("overlap="+overlap);
+		//String s = convertNodeLocToMidPlaneBlockCode("R23M0");
+		//System.out.println(s);
+		
 	}
 }

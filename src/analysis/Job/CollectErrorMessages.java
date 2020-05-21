@@ -17,8 +17,8 @@ public class CollectErrorMessages {
 	{
 		if(args.length<4)
 		{
-			System.out.println("Usage: java CollectWarnFatalMessages [schemaPath] [severity_index] [logDir] [log_extension]");
-			System.out.println("Example: java CollectWarnFatalMessages /home/fti/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt 14 /home/fti/Catalog-project/miralog/RAS-Job/Job csv");
+			System.out.println("Usage: java CollectErrorMessages [schemaPath] [severity_index] [logDir] [log_extension]");
+			System.out.println("Example: java CollectErrorMessages /home/fti/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt 14 /home/fti/Catalog-project/miralog/RAS-Job/Job csv");
 			System.exit(0);
 		}
 		

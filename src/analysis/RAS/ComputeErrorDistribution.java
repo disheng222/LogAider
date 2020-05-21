@@ -17,7 +17,7 @@ import util.RecordSplitter;
 //Generate location distribution (to be plotted on graph)
 public class ComputeErrorDistribution {
 
-	static String initTimeStamp = "2015-01-01 00:00:00.000000";
+	static String initTimeStamp = "2013-04-01 00:00:00.000000";
 	static long seconds = 86400; //checking interval
 	static HashMap<String, LocDistributionElement>[] locMap = new HashMap[4];
 	
@@ -26,15 +26,15 @@ public class ComputeErrorDistribution {
 	
 	static List<String> dailyErrCountList = new ArrayList<String>();
 	
-	static String maintenanceFile = "/home/fti/Catalog-project/miralog/one-year-data/ALCF-Data/RAS/schema/maintainance-period.txt";
+	static String maintenanceFile = "/home/sdi/windows-xp/Work/Catalog-project/Catalog-data/miralog/5-year-data/Job/schema/maintenance_periods.txt";
 	
 	public static void main(String[] args)
 	{
 		if(args.length<9 || args.length%2==0)
 		{
 			System.out.println("Usage: java ComputeErrorDistribution [[filterFieldIndex] [filterValue] ....] [logDir] [logExtension] [locationIndex] [separator] [outputDir] [merge/separate] [isAND (or OR)]");
-			System.out.println("Example: java ComputeErrorDistribution 4 FATAL 13 END_JOB /home/fti/Catalog-project/miralog csvtmp 8 - /home/fti/Catalog-project/miralog/errLocDistribution merge true");
-			System.out.println("Example: java ComputeErrorDistribution 4 FATAL 1 00062001 /home/fti/Catalog-project/miralog csvtmp 8 - /home/fti/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 merge false");
+			System.out.println("Example: java ComputeErrorDistribution 4 FATAL 13 END_JOB /home/sdi/Catalog-project/miralog csv 8 - /home/sdi/Catalog-project/miralog/errLocDistribution merge true");
+			System.out.println("Example: java ComputeErrorDistribution 4 FATAL 1 00062001 /home/sdi/Catalog-project/miralog csv 8 - /home/sdi/Catalog-project/miralog/errLocDistribution/FATAL_MSGID_00062001 merge false");
 			System.exit(0);
 		}
 		
@@ -223,7 +223,7 @@ public class ComputeErrorDistribution {
 			List<String> lineList, int locationIndex, String separator)
 	{
 		Iterator<String> iter2 = lineList.iterator();
-		while(iter2.hasNext())
+		for(int i = 0;iter2.hasNext();i++)
 		{
 			String line = iter2.next();
 			if(line.startsWith("#"))
@@ -317,9 +317,9 @@ public class ComputeErrorDistribution {
 			String[] s = RecordSplitter.partition(line);
 			
 			double eventTime = RecordElement.computeDoubleTimeinSeconds(s[5]); //time stamp
-//			boolean isMaint = TemporalSpatialFilter.isMaintenanceMsg(eventTime);
-//			if(isMaint)
-//				continue;
+			boolean isMaint = TemporalSpatialFilter.isMaintenanceMsg(eventTime);
+			if(isMaint)
+				continue;
 			
 			boolean allMatch = true;
 			Iterator<FilterElement> iter3 = filterList.iterator();

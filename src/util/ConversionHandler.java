@@ -57,7 +57,7 @@ public class ConversionHandler {
 			sum += countVector[i];
 
 		for (int i = 0; i < size; i++) {
-			String s = String.valueOf(offset + x_unit * (i + 1));
+			String s = String.valueOf(offset + x_unit * (i+1)); //(i+1):including the max value; (i): including the min value
 			result[i] = countVector[i] / sum;
 			s += " " + String.valueOf(result[i]);
 			countList.add(s);

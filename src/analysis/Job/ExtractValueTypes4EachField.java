@@ -47,6 +47,7 @@ public class ExtractValueTypes4EachField {
 			List<String> lineList = PVFile.readFile(filePath);
 			System.out.println("Extracting value types .....");
 			Iterator<String> iter2 = lineList.iterator();
+			iter2.next();//exclude the first line (meta data)
 			while(iter2.hasNext())
 			{
 				String line = iter2.next();
@@ -55,7 +56,7 @@ public class ExtractValueTypes4EachField {
 				String[] data = RecordSplitter.partition(line);
 				fixData(data);
 
-				for(int i = 0;i<data.length;i++)
+				for(int i = 0;i<fieldList.size();i++)
 				{
 					if(data[i]!=null)
 						fields[i].checkAndAdd(data[i].trim());

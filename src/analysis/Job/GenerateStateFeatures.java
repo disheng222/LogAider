@@ -22,6 +22,8 @@ public class GenerateStateFeatures {
 			System.out.println("Example: java GenerateStateFeatures /home/fti/Catalog-project/miralog/RAS-Job/Job/basicSchema/basicSchema.txt /home/fti/Catalog-project/miralog/fullSchema/fullSchema/withRatio fsr "
 					+ "/home/fti/Catalog-project/miralog/RAS-Job/Job csv /home/fti/Catalog-project/miralog/RAS-Job/Job/featureState"
 					+ " capability exit_code major_project mode nodes_cost percentile prod_queue project_name queue science_field science_field_short size_buckets3 size_cost user");
+			System.out.println("Example2: java GenerateStateFeatures /home/sdi/Work/Catalog-project/Catalog-data/miralog/5-year-data/Job/schema/basicSchema.txt /home/sdi/Work/Catalog-project/Catalog-data/miralog/5-year-data/Job/fullschema/withRatio fsr /home/sdi/Work/Catalog-project/Catalog-data/miralog/5-year-data/Job csvs /home/sdi/Work/Catalog-project/Catalog-data/miralog/5-year-data/Job/featureState USERNAME_GENID PROJECT_NAME_GENID QUEUE_NAME NODES_USED NODES_REQUESTED LOCATION EXIT_STATUS MACHINE_PARTITION PERCENTILE EXIT_SIGNAL");
+			
 			System.exit(0);
 		}
 		
@@ -66,6 +68,7 @@ public class GenerateStateFeatures {
 			System.out.println("Processing file "+logFilePath);
 			double initLogTime = System.currentTimeMillis()/1000.0;
 			Iterator<String> iter2 = lineList.iterator();
+			iter2.next(); //exclude the first line (meta data)
 			for(int a = 0;iter2.hasNext();a++)
 			{
 				String line = iter2.next();

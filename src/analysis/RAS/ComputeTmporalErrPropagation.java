@@ -55,7 +55,7 @@ public class ComputeTmporalErrPropagation {
 				String component = s[4];
 				String category = s[3];
 				String blockCode = s[9];
-				RASRecord r = new RASRecord(time, recID, msgID, component, category, blockCode, line);
+				RASRecord r = new RASRecord(time, recID, msgID, component, category, blockCode, 0, line);
 				rlist.add(r);
 			}
 		}

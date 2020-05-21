@@ -280,16 +280,19 @@ public class TemporalSpatialFilter {
 		}
 		if(!foundExist)
 		{
-			//all records with the same messageID has the same severity and category
-			EventElement newEE = new EventElement(eventID++, curRE.getMsgID(), curRE.getSeverity(), curRE.getCategory(), 
-					curLocation, curRE, curRE.getLocation());
-			if(curRE.getAllocation().startsWith("MIR"))
-			{
-				int blockSize = Integer.parseInt(curRE.getAllocation().split("-")[3]);
-				newEE.setBlockSize(blockSize);
+			try {
+				//all records with the same messageID has the same severity and category
+				EventElement newEE = new EventElement(eventID++, curRE.getMsgID(), curRE.getSeverity(),
+						curRE.getCategory(), curLocation, curRE, curRE.getLocation());
+				if (curRE.getAllocation().startsWith("MIR")) {
+					int blockSize = Integer.parseInt(curRE.getAllocation().split("-")[3]);
+					newEE.setBlockSize(blockSize);
+				}
+				newEE.componentList.add(curRE.getComponent());
+				latestEventList.add(newEE);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			newEE.componentList.add(curRE.getComponent());
-			latestEventList.add(newEE);
 		}
 		return toLoadEventList; //old list
 	}

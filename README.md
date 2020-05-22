@@ -69,8 +69,11 @@ period inside a log or across multiple logs, based on an effective
 similarity analysis strategy. 
 
 This code corresponds to the paper published in CCGrid2017: [LogAider - A tool for mining potential correlations in HPC system logs](https://ieeexplore.ieee.org/document/7973730/).
+This code is also used in the analysis of the BlueG/Q systems (mainly the ANL MIRA system) in the following two papers: 
+[1] Sheng Di, Hanqi Guo, Eric Pershey, Marc Snir, Franck Cappello, "Characterizing and Understanding HPC Job Failures over The 2K-day Life of IBM BlueGene/Q System", IEEE/IFIP 49th International Conference on Dependable Systems and Networks (IEEE DSN19), Portland, USA, 2019.
+[2] Sheng Di, Hanqi Guo, Rinku Gupta, Eric Pershey, Marc Snir, Franck Cappello, "Exploring Properties and Correlations of Fatal Events in a Large-Scale HPC System," in IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS), 2018.
 
-As the developer, I strongly recommend you to read the paper carefully to understand how LogAider works, in that the following description may use some terms defined in the paper, such as value-combination pool.
+As the developer, I strongly recommend you to read the CCGrid paper carefully to understand how LogAider works, in that the following description may use some terms defined in the paper, such as value-combination pool.
 
 The Mira RAS log data are available to download from [https://reports.alcf.anl.gov/data/mira.html](https://reports.alcf.anl.gov/data/mira.html)
 
